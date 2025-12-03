@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { 
-  Code, 
   Database, 
   Globe, 
   Users, 
   GitBranch, 
-  ChevronDown, 
   ExternalLink, 
   Mail, 
   Github, 
@@ -16,10 +15,43 @@ import {
   Menu,
   X,
   Calendar,
-  CheckCircle2
+  CheckCircle2,
+  Code as CodeIcon,
+  ChevronDown
 } from 'lucide-react';
 
-const skillsData = [
+interface Skill {
+  category: string;
+  icon: ReactNode;
+  techs: string[];
+  desc: string;
+}
+
+interface Project {
+  id: number;
+  title: string;
+  category: string;
+  role: string;
+  description: string;
+  fullDescription: string;
+  deliverables: string[];
+  techs: string[];
+  icon: ReactNode;
+  color: string;
+  date: string;
+}
+
+interface ProjectModalProps {
+  project: Project | null;
+  onClose: () => void;
+}
+
+interface ProjectCardProps {
+  project: Project;
+  onClick: () => void;
+}
+
+const skillsData: Skill[] = [
   {
     category: "Programmation Orientée Objet",
     icon: <Cpu className="w-8 h-8 text-blue-400" />,
@@ -52,7 +84,7 @@ const skillsData = [
   }
 ];
 
-const projectsData = [
+const projectsData: Project[] = [
   {
     id: 1,
     title: "Jeu Latice (Java)",
@@ -61,7 +93,7 @@ const projectsData = [
     description: "Implémentation complète d'un jeu de société complexe avec interface graphique. Gestion stricte de l'état du jeu, des règles et de l'IA basique.",
     fullDescription: "Ce projet consistait à numériser le jeu de société Latice en respectant scrupuleusement les règles officielles. Le défi principal était de concevoir une architecture orientée objet capable de gérer l'état complexe du plateau et les interactions des joueurs en temps réel.",
     deliverables: ["Code source Java", "Documentation technique (UML)", "Exécutable .jar"],
-    techs: ["Java", "JavaFX", "POO", "MVC"],
+    techs: ["Java", "Swing/JavaFX", "POO", "MVC"],
     icon: <Terminal className="w-12 h-12 text-white opacity-80" />,
     color: "from-blue-600 to-blue-900",
     date: "2023"
@@ -87,7 +119,7 @@ const projectsData = [
     description: "Conception et implémentation d'une base de données PostgreSQL complexe. Écriture de scripts de maintenance et de vues pour le reporting.",
     fullDescription: "L'objectif était de structurer une base de données cohérente pour une grande quantité de données. J'ai mis en place des contraintes d'intégrité strictes, des triggers pour l'automatisation et des vues pour faciliter l'accès aux données par les non-techniciens.",
     deliverables: ["Scripts SQL (DDL/DML)", "Procédures stockées", "Dictionnaire de données"],
-    techs: ["PostgreSQL", "SQL", "Bash"],
+    techs: ["PostgreSQL", "PL/pgSQL", "Bash", "Merise"],
     icon: <Database className="w-12 h-12 text-white opacity-80" />,
     color: "from-emerald-600 to-emerald-900",
     date: "2024"
@@ -100,7 +132,7 @@ const projectsData = [
     description: "Simulation d'un projet réel en équipe. Gestion du backlog, animation des cérémonies (Daily, Review, Retro) et suivi de l'avancement.",
     fullDescription: "Dans ce projet académique de grande envergure, le défi n'était pas seulement technique mais humain. En tant que Scrum Master, j'ai dû m'assurer que l'équipe restait alignée sur les objectifs du sprint et que la communication était fluide via Trello et Git.",
     deliverables: ["Backlog produit", "Rapport de projet", "Présentation orale"],
-    techs: ["Trello", "Agile/Scrum", "GitLab"],
+    techs: ["Trello", "Agile/Scrum", "GitLab", "Jira"],
     icon: <Users className="w-12 h-12 text-white opacity-80" />,
     color: "from-pink-600 to-pink-900",
     date: "2024"
@@ -240,7 +272,7 @@ const Skills = () => {
   );
 };
 
-const ProjectModal = ({ project, onClose }) => {
+const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
   if (!project) return null;
 
   return (
@@ -298,7 +330,7 @@ const ProjectModal = ({ project, onClose }) => {
 
             <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700/50">
                <h4 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
-                 <Code size={16} className="text-blue-400"/> Stack Technique
+                 <CodeIcon size={16} className="text-blue-400"/> Stack Technique
                </h4>
                <div className="flex flex-wrap gap-2">
                  {project.techs.map((t, i) => (
@@ -315,7 +347,7 @@ const ProjectModal = ({ project, onClose }) => {
   );
 };
 
-const ProjectCard = ({ project, onClick }) => {
+const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
   return (
     <div className="group relative bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-slate-500 transition-all duration-300 flex flex-col h-full">
       <div className={`h-48 bg-gradient-to-br ${project.color} flex items-center justify-center relative overflow-hidden`}>
@@ -375,7 +407,7 @@ const ProjectCard = ({ project, onClick }) => {
 };
 
 const Projects = () => {
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   return (
     <section id="projects" className="py-20 bg-slate-950">
@@ -434,6 +466,10 @@ const Footer = () => {
 
         <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-slate-800 text-slate-500 text-sm">
           <p>© 2024 - Tous droits réservés.</p>
+          <div className="flex gap-6 mt-4 md:mt-0">
+            <a href="#" className="hover:text-white transition-colors">Mentions Légales</a>
+            <a href="#" className="hover:text-white transition-colors">Confidentialité</a>
+          </div>
         </div>
       </div>
     </footer>
