@@ -25,6 +25,12 @@ interface Skill {
   icon: ReactNode;
   techs: string[];
   desc: string;
+  analyse?: string;
+}
+
+interface SkillModalProps {
+  skill: Skill | null;
+  onClose: () => void;
 }
 
 interface Project {
@@ -56,31 +62,36 @@ const skillsData: Skill[] = [
     category: "Programmation Orientée Objet",
     icon: <Cpu className="w-8 h-8 text-blue-400" />,
     techs: ["Java", "Design Patterns", "UML", "Junit"],
-    desc: "Conception robuste et modulaire respectant les principes SOLID."
+    desc: "Conception robuste et modulaire respectant les principes SOLID.",
+    analyse: "Durant mon parcours formateur, j'ai conceptualisé et développé plusieurs architectures orientées objet. Mon apprentissage des design patterns m'a permis d'implémenter des solutions flexibles et évolutives, en utilisant des principes comme SOLID, et en garantissant la qualité de la base de code grâce à des tests unitaires (Mocking, JUnit)."
   },
   {
     category: "Bases de Données",
     icon: <Database className="w-8 h-8 text-emerald-400" />,
     techs: ["PostgreSQL", "SQL Avancé", "Modélisation MCD/MLD", "Procédures Stockées"],
-    desc: "Gestion de l'intégrité des données et optimisation des requêtes."
+    desc: "Gestion de l'intégrité des données et optimisation des requêtes.",
+    analyse: "J'ai acquis une solide expérience dans la conception de bases de données, en partant de l'analyse des besoins métiers pour créer des modèles conceptuels (MCD/MLD) jusqu'à l'implémentation physique sous PostgreSQL. Je maîtrise l'écriture de requêtes structurées, la création de triggers, ainsi que les procédures stockées permettant de garantir l'intégrité et la fiabilité des données."
   },
   {
     category: "Développement Web",
     icon: <Globe className="w-8 h-8 text-purple-400" />,
     techs: ["HTML5/CSS3", "JavaScript", "PHP", "React (Notions)"],
-    desc: "Création d'interfaces réactives et logiques métier complètes."
+    desc: "Création d'interfaces réactives et logiques métier complètes.",
+    analyse: "Je conçois des applications web dynamiques et responsives. Du développement orienté front-end interactif avec JavaScript (et des bases en React) au développement back-end logique reposant sur PHP et des architectures MVC, j'ai appris à structurer mon code convenablement pour de meilleures performances et une maintenabilité aisée."
   },
   {
     category: "DevOps & Outils",
     icon: <GitBranch className="w-8 h-8 text-orange-400" />,
     techs: ["Git", "GitLab CI", "Linux", "Docker"],
-    desc: "Versionning, intégration continue et travail collaboratif."
+    desc: "Versionning, intégration continue et travail collaboratif.",
+    analyse: "Afin de sécuriser et faciliter le développement, je place au centre de ma méthode de travail le versionnement rigoureux sous Git et l’automatisation des déploiements. J'ai eu l'opportunité de configurer des pipelines d'intégration continue via GitLab CI et j'utilise des systèmes Linux au quotidien, en y greffant des concepts de conteneurisation au moyen de Docker."
   },
   {
     category: "Agilité & Soft Skills",
     icon: <Users className="w-8 h-8 text-pink-400" />,
     techs: ["Scrum", "Trello", "Communication", "Gestion de conflit"],
-    desc: "Organisation en sprints et livraison incrémentale de valeur."
+    desc: "Organisation en sprints et livraison incrémentale de valeur.",
+    analyse: "Mon adaptabilité et ma capacité à travailler en équipe sont des atouts majeurs. En endossant le rôle de Scrum Master lors de divers projets collaboratifs, j’ai orchestré des rituels agiles (Daily, Sprint Review, Rétrospective) favorisant une livraison de valeur en continu. Ces expériences ont façonné ma communication au sein d'une équipe technique et renforcé mon leadership pour débloquer les situations complexes."
   }
 ];
 
@@ -237,10 +248,68 @@ const Hero = () => {
   );
 };
 
-const Skills = () => {
+const SkillModal = ({ skill, onClose }: SkillModalProps) => {
+  if (!skill) return null;
+
   return (
-    <section id="skills" className="py-20 bg-slate-900">
-      <div className="container mx-auto px-6">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
+      <div 
+        className="bg-slate-900 border border-slate-700 w-full max-w-2xl rounded-2xl relative shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto"
+        onClick={e => e.stopPropagation()} 
+      >
+        <div className="p-8 pt-12 relative flex-1">
+          <button 
+            onClick={onClose} 
+            className="absolute top-4 right-4 bg-slate-800 hover:bg-slate-700 text-white p-2 rounded-full transition-colors"
+          >
+            <X size={20} />
+          </button>
+          
+          <div className="flex items-center gap-4 mb-6">
+            <div className="p-4 bg-slate-800 rounded-xl border border-slate-700 shadow-xl shrink-0">
+               {skill.icon}
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold text-white mb-1">{skill.category}</h3>
+              <p className="text-blue-400 font-medium text-sm">Analyse et Expérience</p>
+            </div>
+          </div>
+          
+          <div className="mb-6 p-5 bg-slate-800/50 rounded-xl border border-slate-700/50">
+             <h4 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+               <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+               L'Analyse
+             </h4>
+             <p className="text-slate-300 leading-relaxed text-sm">
+               {skill.analyse || skill.desc}
+             </p>
+          </div>
+
+          <div>
+             <h4 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+               <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
+               Technologies / Méthodologies
+             </h4>
+             <div className="flex flex-wrap gap-2">
+               {skill.techs.map((tech, i) => (
+                 <span key={i} className="px-3 py-1 bg-slate-700 text-emerald-300 rounded-full text-sm font-medium border border-slate-600">
+                   {tech}
+                 </span>
+               ))}
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Skills = () => {
+  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+
+  return (
+    <section id="skills" className="py-20 bg-slate-900 relative">
+      <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Domaines de Maîtrise</h2>
           <div className="w-20 h-1 bg-blue-500 mx-auto rounded-full"></div>
@@ -251,23 +320,40 @@ const Skills = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {skillsData.map((skill, index) => (
-            <div key={index} className="bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-700 hover:border-blue-500/50 transition-all hover:shadow-lg hover:shadow-blue-500/10 group">
-              <div className="mb-6 bg-slate-900 w-16 h-16 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            <div key={index} className="bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-700 hover:border-blue-500/50 transition-all hover:shadow-lg hover:shadow-blue-500/10 group flex flex-col h-full relative overflow-hidden">
+              <div className="mb-6 bg-slate-900 w-16 h-16 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shrink-0">
                 {skill.icon}
               </div>
               <h3 className="text-xl font-bold text-white mb-3">{skill.category}</h3>
-              <p className="text-slate-400 mb-6 text-sm h-10">{skill.desc}</p>
-              <div className="flex flex-wrap gap-2">
-                {skill.techs.map((tech, i) => (
+              <p className="text-slate-400 mb-6 text-sm flex-1">{skill.desc}</p>
+              
+              <div className="flex flex-wrap gap-2 mb-8">
+                {skill.techs.slice(0, 3).map((tech, i) => (
                   <span key={i} className="px-3 py-1 bg-slate-700 text-blue-300 rounded-full text-xs font-medium">
                     {tech}
                   </span>
                 ))}
+                {skill.techs.length > 3 && (
+                  <span className="px-3 py-1 bg-slate-700 text-blue-300 rounded-full text-xs font-medium">
+                    +{skill.techs.length - 3}
+                  </span>
+                )}
+              </div>
+
+              <div className="mt-auto">
+                <button 
+                  onClick={() => setSelectedSkill(skill)}
+                  className="w-full py-3 bg-slate-800 hover:bg-blue-600 text-white text-sm font-semibold rounded-xl transition-all duration-300 border border-slate-600 hover:border-blue-500 flex justify-center items-center gap-2 group/btn"
+                >
+                  Lire l'analyse
+                </button>
               </div>
             </div>
           ))}
         </div>
       </div>
+      
+      <SkillModal skill={selectedSkill} onClose={() => setSelectedSkill(null)} />
     </section>
   );
 };
