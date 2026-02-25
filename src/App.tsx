@@ -242,7 +242,7 @@ const Hero = () => {
             <Layers size={20} />
             Voir mes projets
           </a>
-          <a href="mailto:benjamin.marty1@etu.unilim.fr" className="px-8 py-4 glass hover:bg-slate-800/80 text-white border border-slate-700 rounded-xl font-semibold transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
+          <a href="#contact" className="px-8 py-4 glass hover:bg-slate-800/80 text-white border border-slate-700 rounded-xl font-semibold transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
             <Mail size={20} />
             Me contacter
           </a>
