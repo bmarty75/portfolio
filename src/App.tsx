@@ -594,44 +594,6 @@ const Projects = ({ selectedProject, setSelectedProject }: ProjectsProps) => {
 };
 
 const Contact = () => {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus('loading');
-
-    // Formulaire de soumission via Web3Forms (gratuit, pas de backend nécessaire)
-    const formData = new FormData(e.currentTarget);
-    formData.append("access_key", "cc2b7ac7-44ca-4832-9369-32145230723a");
-
-    // Conversion en JSON pour l'API Web3Forms
-    const object = Object.fromEntries(formData);
-    const json = JSON.stringify(object);
-
-    try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: json
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        setStatus('success');
-        e.currentTarget.reset();
-      } else {
-        console.error("Erreur Web3Forms:", data);
-        setStatus('error');
-      }
-    } catch (err) {
-      console.error("Erreur Fetch:", err);
-      setStatus('error');
-    }
-  };
 
   return (
     <section id="contact" className="py-20 bg-slate-900 relative">
@@ -671,7 +633,11 @@ const Contact = () => {
           </div>
 
           <div className="lg:w-7/12">
-            <form onSubmit={handleSubmit} className="glass p-8 rounded-3xl border border-slate-700/50 shadow-2xl shadow-black/40 border-t-white/10">
+            <form action="https://api.web3forms.com/submit" method="POST" className="glass p-8 rounded-3xl border border-slate-700/50 shadow-2xl shadow-black/40 border-t-white/10">
+
+              <input type="hidden" name="access_key" value="cc2b7ac7-44ca-4832-9369-32145230723a" />
+              <input type="hidden" name="subject" value="Nouveau message de votre Portfolio !" />
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-slate-400 mb-2">Votre Nom</label>
@@ -689,29 +655,11 @@ const Contact = () => {
 
               <button
                 type="submit"
-                disabled={status === 'loading'}
-                className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_0_20px_-5px_rgba(79,70,229,0.5)]"
+                className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 group shadow-[0_0_20px_-5px_rgba(79,70,229,0.5)]"
               >
-                {status === 'loading' ? 'Envoi en cours...' : (
-                  <>
-                    Envoyer le message
-                    <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                  </>
-                )}
+                Envoyer le message
+                <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </button>
-
-              {status === 'success' && (
-                <div className="mt-6 p-4 glass border-emerald-500/50 rounded-xl flex items-center gap-3 text-emerald-400 shadow-lg shadow-emerald-500/10">
-                  <CheckCircle2 size={20} className="shrink-0" />
-                  <p className="text-sm font-medium">Votre message a bien été envoyé ! Je vous réponds très vite.</p>
-                </div>
-              )}
-              {status === 'error' && (
-                <div className="mt-6 p-4 glass border-rose-500/50 rounded-xl flex items-center gap-3 text-rose-400 shadow-lg shadow-rose-500/10">
-                  <AlertCircle size={20} className="shrink-0" />
-                  <p className="text-sm font-medium">Une erreur est survenue (Avez-vous configuré la clé API Web3Forms ?). Veuillez m'envoyer un email manuellement.</p>
-                </div>
-              )}
             </form>
           </div>
         </div>
