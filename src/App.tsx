@@ -608,16 +608,23 @@ const Contact = () => {
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
+        headers: {
+          "Accept": "application/json"
+        },
         body: formData
       });
 
-      if (res.ok) {
+      const data = await res.json();
+
+      if (res.ok && data.success) {
         setStatus('success');
         e.currentTarget.reset();
       } else {
+        console.error("Erreur Web3Forms:", data);
         setStatus('error');
       }
     } catch (err) {
+      console.error("Erreur Fetch:", err);
       setStatus('error');
     }
   };
