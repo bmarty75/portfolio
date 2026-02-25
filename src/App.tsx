@@ -18,8 +18,7 @@ import {
   CheckCircle2,
   Code as CodeIcon,
   ChevronDown,
-  Send,
-  AlertCircle
+  Send
 } from 'lucide-react';
 
 interface Skill {
