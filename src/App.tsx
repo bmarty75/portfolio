@@ -610,8 +610,8 @@ const Contact = () => {
         method: "POST",
         body: formData
       });
-      const data = await res.json();
-      if (data.success) {
+
+      if (res.ok) {
         setStatus('success');
         e.currentTarget.reset();
       } else {
