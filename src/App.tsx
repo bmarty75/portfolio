@@ -602,16 +602,20 @@ const Contact = () => {
 
     // Formulaire de soumission via Web3Forms (gratuit, pas de backend nécessaire)
     const formData = new FormData(e.currentTarget);
-    // TODO: Remplacer ceci par votre clé d'accès Web3Forms
     formData.append("access_key", "cc2b7ac7-44ca-4832-9369-32145230723a");
+
+    // Conversion en JSON pour l'API Web3Forms
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
 
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
           "Accept": "application/json"
         },
-        body: formData
+        body: json
       });
 
       const data = await res.json();
