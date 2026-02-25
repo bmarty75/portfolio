@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import {
   Database,
@@ -59,6 +59,45 @@ interface ProjectCardProps {
   project: Project;
   onClick: () => void;
 }
+
+// Hook d'Intersection Observer pour les animations au défilement
+function useIntersectionObserver(options = {}) {
+  const [isIntersecting, setIsIntersecting] = useState(false);
+  const targetRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsIntersecting(true);
+        observer.unobserve(entry.target);
+      }
+    }, { threshold: 0.1, ...options });
+
+    const currentTarget = targetRef.current;
+    if (currentTarget) observer.observe(currentTarget);
+
+    return () => {
+      if (currentTarget) observer.unobserve(currentTarget);
+    };
+  }, [options]);
+
+  return [targetRef, isIntersecting] as const;
+}
+
+// Composant Reveal pour animer l'apparition
+const Reveal = ({ children, delay = 0, className = "" }: { children: ReactNode, delay?: number, className?: string }) => {
+  const [ref, isVisible] = useIntersectionObserver();
+  let delayClass = "";
+  if (delay === 100) delayClass = "reveal-delay-100";
+  if (delay === 200) delayClass = "reveal-delay-200";
+  if (delay === 300) delayClass = "reveal-delay-300";
+
+  return (
+    <div ref={ref} className={`reveal ${isVisible ? 'active' : ''} ${delayClass} ${className}`}>
+      {children}
+    </div>
+  );
+};
 
 const skillsData: Skill[] = [
   {
@@ -179,7 +218,7 @@ const Navigation = () => {
     <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'glass-nav shadow-lg shadow-blue-900/20 py-4' : 'bg-transparent py-6'}`}>
       <div className="container mx-auto px-6 flex justify-between items-center">
         <a href="#" className="text-2xl font-black tracking-tighter bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent drop-shadow-sm hover:scale-105 transition-transform cursor-pointer">
-          DEV.<span className="text-slate-100">PORTFOLIO</span>
+          Benjamin <span className="text-slate-100">Marty</span>
         </a>
 
         <div className="hidden md:flex space-x-8">
@@ -219,37 +258,56 @@ const Navigation = () => {
 
 const Hero = () => {
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-slate-900">
-      <div className="absolute top-20 left-10 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-      <div className="absolute top-20 right-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-      <div className="absolute -bottom-32 left-1/2 w-72 h-72 bg-emerald-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+    <section id="home" className="min-h-screen flex items-center justify-center relative bg-[#050b14] bg-noise overflow-hidden">
+      {/* Premium Background Grid */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-50"></div>
 
-      <div className="container mx-auto px-6 text-center z-10">
-        <div className="inline-block px-4 py-1.5 mb-8 border border-slate-700/50 rounded-full glass shadow-lg shadow-purple-500/10">
-          <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent text-sm font-bold tracking-widest uppercase">
-            DÉVELOPPEUR JUNIOR & FUTUR INGÉNIEUR
-          </span>
-        </div>
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-tight tracking-tight">
-          Transformer des idées <br />
-          en <span className="bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500 bg-clip-text text-transparent drop-shadow-sm">Solutions Robustes</span>
-        </h1>
-        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
-          Passionné par la conception logicielle, du Back-end Java aux bases de données complexes, avec une approche Agile et DevOps rigoureuse.
-        </p>
-        <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-          <a href="#projects" className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-semibold transition-all shadow-[0_0_40px_-10px_rgba(79,70,229,0.5)] hover:shadow-[0_0_60px_-15px_rgba(79,70,229,0.7)] hover:-translate-y-1 flex items-center justify-center gap-2">
-            <Layers size={20} />
-            Voir mes projets
-          </a>
-          <a href="#contact" className="px-8 py-4 glass hover:bg-slate-800/80 text-white border border-slate-700 rounded-xl font-semibold transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
-            <Mail size={20} />
-            Me contacter
-          </a>
-        </div>
+      {/* Ambient glowing blobs */}
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-600/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-sky-600/20 rounded-full mix-blend-screen filter blur-[80px] animate-blob animation-delay-2000"></div>
+
+      <div className="container mx-auto px-6 text-center z-10 relative mt-16 pb-16">
+        <Reveal delay={0}>
+          <div className="inline-flex items-center gap-2 px-5 py-2 mb-8 md:mb-10 border border-indigo-500/20 rounded-full bg-indigo-500/5 backdrop-blur-md shadow-[0_0_20px_-5px_rgba(99,102,241,0.2)]">
+            <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+            <span className="text-blue-300 text-xs font-bold tracking-[0.2em] uppercase">
+              Benjamin Marty — Développeur Junior
+            </span>
+          </div>
+        </Reveal>
+
+        <Reveal delay={100}>
+          <h1 className="text-5xl md:text-7xl lg:text-[6.5rem] font-bold text-white mb-6 md:mb-8 leading-[1.1] tracking-tight">
+            Créateur de <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-br from-blue-300 via-indigo-400 to-purple-400 drop-shadow-sm pb-2">Solutions Connectées</span>
+          </h1>
+        </Reveal>
+
+        <Reveal delay={200}>
+          <p className="text-slate-400/90 text-lg md:text-xl max-w-2xl mx-auto mb-10 md:mb-14 leading-relaxed font-light">
+            Développeur passionné par la conception logicielle. De l'architecture back-end <strong className="text-slate-200 font-medium">Java</strong> à la modélisation de <strong className="text-slate-200 font-medium">Bases de Données</strong>, avec une approche d'ingénierie rigoureuse.
+          </p>
+        </Reveal>
+
+        <Reveal delay={300}>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <a href="#projects" className="group relative px-8 py-4 bg-white text-slate-900 rounded-2xl font-bold transition-all hover:scale-105 flex items-center justify-center gap-2 overflow-hidden shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)]">
+              <span className="relative z-10 flex items-center gap-2">
+                <Layers size={20} className="group-hover:-translate-y-0.5 transition-transform" />
+                Découvrir mon travail
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-100 to-white opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </a>
+
+            <a href="#contact" className="px-8 py-4 bg-slate-800/50 hover:bg-slate-800 backdrop-blur-sm text-white border border-slate-700/50 hover:border-slate-500 rounded-2xl font-semibold transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
+              <Mail size={20} className="text-slate-400" />
+              Me contacter
+            </a>
+          </div>
+        </Reveal>
       </div>
 
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <div className="absolute bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce z-20">
         <a href="#skills" className="text-slate-500 hover:text-white transition-colors">
           <ChevronDown size={32} />
         </a>
@@ -346,55 +404,81 @@ interface SkillsProps {
   onOpenProject: (projectId: number) => void;
 }
 
+const SkillCard = ({ skill, onClick }: { skill: Skill; onClick: () => void }) => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  return (
+    <div
+      onMouseMove={handleMouseMove}
+      className="glass p-8 rounded-3xl border border-slate-700/50 hover:border-indigo-500/50 transition-all duration-500 hover:shadow-[0_0_40px_-15px_rgba(99,102,241,0.3)] group flex flex-col h-full relative overflow-hidden card-hover-effect cursor-default"
+    >
+      {/* Interactive Spotlight Effect */}
+      <div
+        className="pointer-events-none absolute -inset-px opacity-0 transition duration-300 group-hover:opacity-100 z-0"
+        style={{
+          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(99, 102, 241, 0.15), transparent 40%)`,
+        }}
+      />
+
+      <div className="absolute -inset-4 bg-gradient-to-r from-indigo-500/0 via-indigo-500/0 to-purple-500/0 group-hover:from-indigo-500/10 group-hover:via-purple-500/5 group-hover:to-pink-500/10 transition-all duration-700 ease-in-out blur-xl opacity-0 group-hover:opacity-100 rounded-3xl pointer-events-none"></div>
+
+      <div className="mb-8 bg-slate-900/80 border border-slate-700/50 w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500 relative z-10 shadow-lg">
+        {skill.icon}
+      </div>
+      <h3 className="text-xl font-bold text-white mb-3 relative z-10 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-300 group-hover:to-purple-300 transition-colors font-display">{skill.category}</h3>
+      <p className="text-slate-400 mb-8 text-sm flex-1 relative z-10 leading-relaxed font-light">{skill.desc}</p>
+
+      <div className="flex flex-wrap gap-2 mb-8 relative z-10">
+        {skill.techs.slice(0, 3).map((tech, i) => (
+          <span key={i} className="px-3 py-1 bg-slate-900/60 text-blue-300 rounded-full text-xs font-medium border border-slate-700/50">
+            {tech}
+          </span>
+        ))}
+        {skill.techs.length > 3 && (
+          <span className="px-3 py-1 bg-slate-900/60 text-blue-300 rounded-full text-xs font-medium border border-slate-700/50">
+            +{skill.techs.length - 3}
+          </span>
+        )}
+      </div>
+
+      <div className="mt-auto relative z-10">
+        <button
+          onClick={onClick}
+          className="w-full py-3.5 glass hover:bg-gradient-to-r hover:from-indigo-600 hover:to-purple-600 text-slate-300 hover:text-white text-sm font-semibold rounded-xl transition-all duration-300 border border-slate-700/50 hover:border-transparent flex justify-center items-center gap-2 group/btn shadow-md hover:shadow-[0_0_20px_-5px_rgba(99,102,241,0.5)]"
+        >
+          Lire l'analyse
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const Skills = ({ onOpenProject }: SkillsProps) => {
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
 
   return (
-    <section id="skills" className="py-20 bg-slate-900 relative">
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Domaines de Maîtrise</h2>
-          <div className="w-20 h-1 bg-blue-500 mx-auto rounded-full"></div>
-          <p className="text-slate-400 mt-4 max-w-xl mx-auto">
-            Une palette technique complète alliant développement pur, gestion de données et méthodologies modernes.
-          </p>
-        </div>
+    <section id="skills" className="py-32 bg-[#080d1a] relative">
+      <div className="container mx-auto px-6 max-w-7xl relative z-10">
+        <Reveal delay={0}>
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 font-display">Domaines de Maîtrise</h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto rounded-full"></div>
+            <p className="text-slate-400 mt-6 max-w-xl mx-auto text-lg leading-relaxed">
+              Une palette technique complète alliant développement pur, gestion de données et méthodologies modernes.
+            </p>
+          </div>
+        </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {skillsData.map((skill, index) => (
-            <div key={index} className="glass p-8 rounded-3xl border border-slate-700/50 hover:border-indigo-500/50 transition-all duration-500 hover:shadow-[0_0_40px_-15px_rgba(99,102,241,0.3)] group flex flex-col h-full relative overflow-hidden card-hover-effect cursor-default">
-
-              {/* Subtle background glow on hover */}
-              <div className="absolute -inset-4 bg-gradient-to-r from-indigo-500/0 via-indigo-500/0 to-purple-500/0 group-hover:from-indigo-500/10 group-hover:via-purple-500/5 group-hover:to-pink-500/10 transition-all duration-700 ease-in-out blur-xl opacity-0 group-hover:opacity-100 rounded-3xl"></div>
-
-              <div className="mb-8 bg-slate-900/80 border border-slate-700/50 w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500 relative z-10 shadow-lg">
-                {skill.icon}
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3 relative z-10 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-300 group-hover:to-purple-300 transition-colors">{skill.category}</h3>
-              <p className="text-slate-400 mb-8 text-sm flex-1 relative z-10 leading-relaxed">{skill.desc}</p>
-
-              <div className="flex flex-wrap gap-2 mb-8">
-                {skill.techs.slice(0, 3).map((tech, i) => (
-                  <span key={i} className="px-3 py-1 bg-slate-700 text-blue-300 rounded-full text-xs font-medium">
-                    {tech}
-                  </span>
-                ))}
-                {skill.techs.length > 3 && (
-                  <span className="px-3 py-1 bg-slate-700 text-blue-300 rounded-full text-xs font-medium">
-                    +{skill.techs.length - 3}
-                  </span>
-                )}
-              </div>
-
-              <div className="mt-auto relative z-10">
-                <button
-                  onClick={() => setSelectedSkill(skill)}
-                  className="w-full py-3.5 glass hover:bg-gradient-to-r hover:from-indigo-600 hover:to-purple-600 text-slate-300 hover:text-white text-sm font-semibold rounded-xl transition-all duration-300 border border-slate-700/50 hover:border-transparent flex justify-center items-center gap-2 group/btn shadow-md hover:shadow-[0_0_20px_-5px_rgba(99,102,241,0.5)]"
-                >
-                  Lire l'analyse
-                </button>
-              </div>
-            </div>
+            <Reveal key={index} delay={(index % 3) * 100}>
+              <SkillCard skill={skill} onClick={() => setSelectedSkill(skill)} />
+            </Reveal>
           ))}
         </div>
       </div>
@@ -490,61 +574,84 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
 };
 
 const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
-  return (
-    <div className="group relative glass rounded-3xl overflow-hidden border border-slate-700/50 hover:border-slate-500/50 transition-all duration-500 flex flex-col h-full card-hover-effect cursor-pointer" onClick={onClick}>
-      <div className={`h-56 bg-gradient-to-br ${project.color} flex items-center justify-center relative overflow-hidden`}>
-        {/* Decorative elements */}
-        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors duration-500"></div>
-        <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-all duration-500"></div>
-        <div className="absolute -left-10 -bottom-10 w-32 h-32 bg-black/30 rounded-full blur-xl group-hover:bg-black/10 transition-all duration-500"></div>
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-        <div className="transform group-hover:scale-110 group-hover:-translate-y-2 transition-transform duration-500 ease-out drop-shadow-2xl">
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  return (
+    <div
+      onMouseMove={handleMouseMove}
+      className="group relative glass rounded-[2.5rem] overflow-hidden border border-slate-700/50 hover:border-indigo-500/50 transition-all duration-700 flex flex-col h-full card-hover-effect cursor-pointer shadow-2xl bg-gradient-to-b from-slate-900/40 to-slate-900/90"
+      onClick={onClick}
+    >
+      <div
+        className="pointer-events-none absolute -inset-px opacity-0 transition duration-300 group-hover:opacity-100 z-0"
+        style={{
+          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(99, 102, 241, 0.15), transparent 40%)`,
+        }}
+      />
+
+      <div className={`h-64 bg-gradient-to-br ${project.color} flex items-center justify-center relative overflow-hidden shrink-0 border-b border-white/5`}>
+        {/* Advanced Decorative elements */}
+        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent z-0"></div>
+        <div className="absolute -right-10 -top-10 w-48 h-48 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-all duration-700 group-hover:scale-150"></div>
+        <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-black/40 rounded-full blur-xl group-hover:bg-black/20 transition-all duration-700"></div>
+
+        <div className="transform group-hover:scale-110 group-hover:-translate-y-2 transition-transform duration-700 ease-out drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] z-10 p-5 glass rounded-3xl border border-white/10">
           {project.icon}
         </div>
-        <div className="absolute bottom-5 left-5">
-          <span className="px-4 py-1.5 bg-black/40 backdrop-blur-md text-white text-xs font-semibold uppercase tracking-wider rounded-xl border border-white/10 shadow-lg">
+
+        <div className="absolute bottom-5 left-6 z-10 hidden sm:block">
+          <span className="px-5 py-2 bg-white/10 backdrop-blur-md text-white/90 text-[10px] font-bold uppercase tracking-[0.2em] rounded-full border border-white/20 shadow-lg">
             {project.category}
           </span>
         </div>
       </div>
 
-      <div className="p-6 flex-1 flex flex-col">
-        <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
-        <p className="text-blue-400 text-sm font-medium mb-4">{project.role}</p>
+      <div className="p-8 lg:p-10 flex-1 flex flex-col relative z-10 backdrop-blur-xl">
+        <h3 className="text-3xl lg:text-4xl font-bold text-white mb-3 font-display tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-300 group-hover:to-purple-300 transition-all drop-shadow-sm">{project.title}</h3>
+        <p className="text-indigo-400 text-sm font-semibold mb-6 tracking-wider uppercase">{project.role}</p>
 
-        <p className="text-slate-300 text-sm mb-6 flex-1">
+        <p className="text-slate-300/90 text-[15px] mb-8 flex-1 font-light leading-relaxed">
           {project.description}
         </p>
 
-        <div className="mb-6 p-4 bg-slate-900/50 rounded-lg border border-slate-700/50">
-          <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Livrables Clés</h4>
-          <ul className="space-y-1">
+        <div className="mb-8 p-6 bg-slate-900/60 rounded-3xl border border-slate-700/50 shadow-inner group-hover:border-slate-600/50 transition-colors relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl"></div>
+          <h4 className="text-[11px] font-bold text-slate-300 uppercase tracking-widest mb-4 flex items-center gap-3 relative z-10">
+            <span className="w-2 h-2 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.8)]"></span>
+            Livrables Clés
+          </h4>
+          <ul className="space-y-3 relative z-10">
             {project.deliverables.slice(0, 2).map((item, idx) => (
-              <li key={idx} className="flex items-center text-slate-300 text-xs">
-                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
+              <li key={idx} className="flex items-start text-slate-400 text-sm font-medium">
+                <span className="w-4 h-px bg-indigo-500/50 mt-2.5 mr-3 shrink-0"></span>
                 {item}
               </li>
             ))}
             {project.deliverables.length > 2 && (
-              <li className="text-slate-500 text-xs pl-3.5 italic">
-                + {project.deliverables.length - 2} autres...
+              <li className="text-slate-500 text-xs pl-7 italic mt-2 font-light">
+                + {project.deliverables.length - 2} autres détails...
               </li>
             )}
           </ul>
         </div>
 
-        <div className="flex items-center justify-between pt-4 border-t border-slate-700">
-          <div className="flex gap-3 text-slate-400">
-            <div className="flex -space-x-2">
-              {project.techs.slice(0, 3).map((t, i) => (
-                <div key={i} className="w-8 h-8 rounded-full bg-slate-700 border-2 border-slate-800 flex items-center justify-center text-[10px] text-white font-bold" title={t}>
-                  {t[0]}
-                </div>
-              ))}
-            </div>
+        <div className="flex flex-wrap items-end justify-between gap-5 pt-6 border-t border-slate-700/50 mt-auto">
+          <div className="flex flex-wrap gap-2 items-center flex-1 min-w-[200px]">
+            {project.techs.map((t, i) => (
+              <span key={i} className="px-3 py-1.5 bg-slate-800/60 border border-slate-700/50 rounded-xl text-xs text-slate-300 font-medium tracking-wider shadow-sm transition-colors hover:border-indigo-500/50 hover:bg-indigo-500/10 hover:text-indigo-200">
+                {t}
+              </span>
+            ))}
           </div>
-          <button className="text-white hover:text-indigo-400 text-sm font-semibold flex items-center gap-2 transition-colors">
-            Voir Détails <ExternalLink size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+          <button className="px-5 py-3 xl:px-6 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 rounded-2xl text-white text-sm font-semibold flex items-center justify-center gap-2 transition-all group/btn shadow-lg backdrop-blur-md shrink-0">
+            Explorer le projet
+            <ExternalLink size={16} className="text-indigo-400 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
           </button>
         </div>
       </div>
@@ -559,27 +666,30 @@ interface ProjectsProps {
 
 const Projects = ({ selectedProject, setSelectedProject }: ProjectsProps) => {
   return (
-    <section id="projects" className="py-20 bg-slate-950">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">Projets Réalisés</h2>
-            <div className="w-20 h-1 bg-purple-500 rounded-full"></div>
-            <p className="text-slate-400 mt-4">Preuves de concept, applications et travail d'équipe.</p>
+    <section id="projects" className="py-32 bg-[#070e1a] relative">
+      <div className="container mx-auto px-6 max-w-7xl relative z-10">
+        <Reveal delay={0}>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-display">Projets Réalisés</h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"></div>
+              <p className="text-slate-400 mt-6 text-lg">Preuves de concept, applications et travail d'équipe.</p>
+            </div>
+            <a href="https://github.com/bmarty75/bmarty75.git" target="_blank" rel="noreferrer" className="hidden md:flex items-center gap-2 text-slate-400 hover:text-white transition-colors mt-4 md:mt-0 font-medium bg-slate-800/50 hover:bg-slate-800 px-6 py-3 rounded-xl border border-slate-700/50 hover:border-slate-500/50">
+              <Github size={20} />
+              Voir mon GitHub
+            </a>
           </div>
-          <a href="https://github.com/bmarty75/bmarty75.git" target="_blank" rel="noreferrer" className="hidden md:flex items-center gap-2 text-slate-400 hover:text-white transition-colors mt-4 md:mt-0">
-            <Github size={20} />
-            Voir mon GitHub
-          </a>
-        </div>
+        </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-          {projectsData.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onClick={() => setSelectedProject(project)}
-            />
+          {projectsData.map((project, index) => (
+            <Reveal key={project.id} delay={(index % 2) * 100}>
+              <ProjectCard
+                project={project}
+                onClick={() => setSelectedProject(project)}
+              />
+            </Reveal>
           ))}
         </div>
       </div>
@@ -595,71 +705,81 @@ const Projects = ({ selectedProject, setSelectedProject }: ProjectsProps) => {
 const Contact = () => {
 
   return (
-    <section id="contact" className="py-20 bg-slate-900 relative">
-      {/* Decorative blob */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+    <section id="contact" className="py-32 bg-[#050b14] relative bg-noise overflow-hidden">
+      {/* Premium background elements */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-50"></div>
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3 absolute pointer-events-none"></div>
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 max-w-7xl relative z-10">
         <div className="flex flex-col lg:flex-row gap-16">
           <div className="lg:w-5/12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Prêt à collaborer ?</h2>
-            <div className="w-20 h-1 bg-blue-500 rounded-full mb-6"></div>
-            <p className="text-slate-400 mb-8 leading-relaxed">
-              Je suis actuellement à la recherche d'un stage. N'hésitez pas à me contacter via ce formulaire, je vous répondrai dans les plus brefs délais !
-            </p>
+            <Reveal delay={0}>
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 font-display">Prêt à collaborer ?</h2>
+              <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full mb-8"></div>
+              <p className="text-slate-400 mb-12 text-lg leading-relaxed">
+                Je suis actuellement à la recherche d'un stage. N'hésitez pas à me contacter via ce formulaire, je vous répondrai dans les plus brefs délais !
+              </p>
 
-            <div className="flex flex-col gap-6">
-              <a href="mailto:benjamin.marty1@etu.unilim.fr" className="flex items-center gap-4 text-slate-300 hover:text-white group">
-                <div className="w-12 h-12 glass rounded-full flex items-center justify-center group-hover:bg-blue-600/20 transition-colors border border-slate-700 border-t-white/10 shadow-lg">
-                  <Mail size={20} className="text-blue-400" />
-                </div>
-                <div>
-                  <p className="text-sm text-slate-500 font-medium">Email direct</p>
-                  <p className="font-semibold text-slate-300">benjamin.marty1@etu.unilim.fr</p>
-                </div>
-              </a>
+              <div className="flex flex-col gap-6">
+                <a href="mailto:benjamin.marty1@etu.unilim.fr" className="flex items-center gap-5 text-slate-300 hover:text-white group">
+                  <div className="w-14 h-14 glass rounded-2xl flex items-center justify-center group-hover:bg-blue-600/20 transition-all group-hover:scale-110 border border-slate-700/50 shadow-lg group-hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.5)] group-hover:border-blue-500/30">
+                    <Mail size={22} className="text-blue-400 transition-transform group-hover:-mt-1" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-500 font-medium mb-1 tracking-wide uppercase">Email direct</p>
+                    <p className="font-semibold text-slate-300 text-lg">benjamin.marty1@etu.unilim.fr</p>
+                  </div>
+                </a>
 
-              <a href="https://www.linkedin.com/in/benjamin-marty-info/" target="_blank" rel="noreferrer" className="flex items-center gap-4 text-slate-300 hover:text-white group">
-                <div className="w-12 h-12 glass rounded-full flex items-center justify-center group-hover:bg-blue-600/20 transition-colors border border-slate-700 border-t-white/10 shadow-lg">
-                  <Linkedin size={20} className="text-blue-400" />
-                </div>
-                <div>
-                  <p className="text-sm text-slate-500 font-medium">Réseau Professionnel</p>
-                  <p className="font-semibold text-slate-300">LinkedIn</p>
-                </div>
-              </a>
-            </div>
+                <a href="https://www.linkedin.com/in/benjamin-marty-info/" target="_blank" rel="noreferrer" className="flex items-center gap-5 text-slate-300 hover:text-white group">
+                  <div className="w-14 h-14 glass rounded-2xl flex items-center justify-center group-hover:bg-blue-600/20 transition-all group-hover:scale-110 border border-slate-700/50 shadow-lg group-hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.5)] group-hover:border-blue-500/30">
+                    <Linkedin size={22} className="text-blue-400 transition-transform group-hover:scale-110" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-500 font-medium mb-1 tracking-wide uppercase">Réseau Professionnel</p>
+                    <p className="font-semibold text-slate-300 text-lg">LinkedIn</p>
+                  </div>
+                </a>
+              </div>
+            </Reveal>
           </div>
 
           <div className="lg:w-7/12">
-            <form action="https://api.web3forms.com/submit" method="POST" className="glass p-8 rounded-3xl border border-slate-700/50 shadow-2xl shadow-black/40 border-t-white/10">
+            <Reveal delay={200}>
+              <form action="https://api.web3forms.com/submit" method="POST" className="glass p-8 md:p-10 rounded-[2rem] border border-slate-700/50 shadow-2xl relative overflow-hidden group">
+                {/* Form spotlight hint */}
+                <div className="absolute -top-32 -right-32 w-64 h-64 bg-indigo-500/20 rounded-full blur-[80px] group-hover:bg-indigo-500/30 transition-colors pointer-events-none"></div>
 
-              <input type="hidden" name="access_key" value="cc2b7ac7-44ca-4832-9369-32145230723a" />
-              <input type="hidden" name="subject" value="Nouveau message de votre Portfolio !" />
+                <input type="hidden" name="access_key" value="cc2b7ac7-44ca-4832-9369-32145230723a" />
+                <input type="hidden" name="subject" value="Nouveau message de votre Portfolio !" />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-slate-400 mb-2">Votre Nom</label>
-                  <input type="text" name="name" id="name" required className="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all shadow-inner" placeholder="Jean Dupont" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div className="relative">
+                    <label htmlFor="name" className="block text-sm font-medium text-slate-400 mb-2 ml-1">Votre Nom</label>
+                    <input type="text" name="name" id="name" required className="w-full bg-slate-900/60 border border-slate-700/80 rounded-2xl px-5 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all shadow-inner focus:bg-slate-900" placeholder="Jean Dupont" />
+                  </div>
+                  <div className="relative">
+                    <label htmlFor="email" className="block text-sm font-medium text-slate-400 mb-2 ml-1">Votre Email</label>
+                    <input type="email" name="email" id="email" required className="w-full bg-slate-900/60 border border-slate-700/80 rounded-2xl px-5 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all shadow-inner focus:bg-slate-900" placeholder="jean@exemple.com" />
+                  </div>
                 </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-slate-400 mb-2">Votre Email</label>
-                  <input type="email" name="email" id="email" required className="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all shadow-inner" placeholder="jean@exemple.com" />
+                <div className="mb-8 relative">
+                  <label htmlFor="message" className="block text-sm font-medium text-slate-400 mb-2 ml-1">Votre Message</label>
+                  <textarea name="message" id="message" required rows={5} className="w-full bg-slate-900/60 border border-slate-700/80 rounded-2xl px-5 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all shadow-inner resize-none focus:bg-slate-900" placeholder="Bonjour, je vous contacte pour un stage..."></textarea>
                 </div>
-              </div>
-              <div className="mb-6">
-                <label htmlFor="message" className="block text-sm font-medium text-slate-400 mb-2">Votre Message</label>
-                <textarea name="message" id="message" required rows={5} className="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all shadow-inner resize-none" placeholder="Bonjour, je vous contacte pour un stage..."></textarea>
-              </div>
 
-              <button
-                type="submit"
-                className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 group shadow-[0_0_20px_-5px_rgba(79,70,229,0.5)]"
-              >
-                Envoyer le message
-                <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-lg rounded-2xl transition-all flex items-center justify-center gap-3 group/btn shadow-[0_0_30px_-5px_rgba(79,70,229,0.5)] hover:shadow-[0_0_40px_-5px_rgba(79,70,229,0.7)] relative overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center gap-2">
+                    Envoyer le message
+                    <Send size={20} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                  </span>
+                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
+                </button>
+              </form>
+            </Reveal>
           </div>
         </div>
       </div>
