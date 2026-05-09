@@ -10,7 +10,7 @@ export const projectsData: Project[] = [
     description:
       "Application web commandée par un vrai client (IUT du Limousin), déployée en production sur le serveur Linux de l'université. 6 modules métier — authentification JWT, maquette pédagogique, suivi des heures — développés en équipe de 5.",
     fullDescription:
-      "Projet de fin de BUT réalisé pour l'IUT du Limousin à la demande de Mme Sarlot (commanditaire réel). En équipe de 5, dont 3 développeurs back-end dont moi-même, nous avons conçu et déployé une application web d'entreprise couvrant 6 modules métier : authentification avec gestion des rôles via Spring Security (JWT), gestion de la maquette pédagogique, fiches ressources, module TAC, suivi des heures et feedbacks. L'application est hébergée en production sur le serveur Linux Debian de l'université, avec un déploiement conteneurisé via Docker et Nginx.",
+      "Projet de deuxième année de BUT réalisé pour l'IUT du Limousin à la demande de Mme Sarlot (commanditaire réel). En équipe de 5, dont 3 développeurs back-end dont moi-même, nous avons conçu et déployé une application web d'entreprise couvrant 6 modules métier : authentification avec gestion des rôles via Spring Security (JWT), gestion de la maquette pédagogique, fiches ressources, module TAC, suivi des heures et feedbacks. L'application est hébergée en production sur le serveur Linux Debian de l'université, avec un déploiement conteneurisé via Docker et Nginx.",
     deliverables: [
       "Application déployée en production sur serveur Linux Debian",
       "API REST Spring Boot 3.3 — 6 modules métier",
