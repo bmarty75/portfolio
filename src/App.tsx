@@ -9,7 +9,6 @@ import {
   Mail,
   Github,
   Linkedin,
-  Terminal,
   Layers,
   Cpu,
   Menu,
@@ -18,36 +17,15 @@ import {
   CheckCircle2,
   Code as CodeIcon,
   ChevronDown,
-  Send
+  Send,
 } from 'lucide-react';
-
-interface Skill {
-  category: string;
-  icon: ReactNode;
-  techs: string[];
-  desc: string;
-  analyse?: string;
-  relatedProjects?: number[];
-}
+import type { Project, Skill } from './types';
+import { projectsData } from './data/projects';
 
 interface SkillModalProps {
   skill: Skill | null;
   onClose: () => void;
   onOpenProject: (projectId: number) => void;
-}
-
-interface Project {
-  id: number;
-  title: string;
-  category: string;
-  role: string;
-  description: string;
-  fullDescription: string;
-  deliverables: string[];
-  techs: string[];
-  icon: ReactNode;
-  color: string;
-  date: string;
 }
 
 interface ProjectModalProps {
@@ -106,96 +84,42 @@ const skillsData: Skill[] = [
     techs: ["Java", "Design Patterns", "UML", "Junit"],
     desc: "Conception robuste et modulaire respectant les principes SOLID.",
     analyse: "Durant mon parcours formateur, j'ai conceptualisé et développé plusieurs architectures orientées objet. Mon apprentissage des design patterns m'a permis d'implémenter des solutions flexibles et évolutives, en utilisant des principes comme SOLID, et en garantissant la qualité de la base de code grâce à des tests unitaires (Mocking, JUnit).",
-    relatedProjects: [1]
+    relatedProjects: [4, 1]
   },
   {
     category: "Bases de Données",
     icon: <Database className="w-8 h-8 text-emerald-400" />,
     techs: ["PostgreSQL", "SQL Avancé", "Modélisation MCD/MLD", "Procédures Stockées"],
-    desc: "Gestion de l'intégrité des données et optimisation des requêtes.",
-    analyse: "J'ai acquis une solide expérience dans la conception de bases de données, en partant de l'analyse des besoins métiers pour créer des modèles conceptuels (MCD/MLD) jusqu'à l'implémentation physique sous PostgreSQL. Je maîtrise l'écriture de requêtes structurées, la création de triggers, ainsi que les procédures stockées permettant de garantir l'intégrité et la fiabilité des données.",
-    relatedProjects: [3, 2]
+    desc: "Gestion de l’intégrité des données et optimisation des requêtes.",
+    analyse: "J’ai acquis une solide expérience dans la conception de bases de données, en partant de l’analyse des besoins métiers pour créer des modèles conceptuels (MCD/MLD) jusqu’à l’implémentation physique sous PostgreSQL. Je maîtrise l’écriture de requêtes structurées, la création de triggers, ainsi que les procédures stockées permettant de garantir l’intégrité et la fiabilité des données.",
+    relatedProjects: [1, 2]
   },
   {
     category: "Développement Web",
     icon: <Globe className="w-8 h-8 text-purple-400" />,
-    techs: ["HTML5/CSS3", "JavaScript", "PHP", "React (Notions)"],
-    desc: "Création d'interfaces réactives et logiques métier complètes.",
-    analyse: "Je conçois des applications web dynamiques et responsives. Du développement orienté front-end interactif avec JavaScript (et des bases en React) au développement back-end logique reposant sur PHP et des architectures MVC, j'ai appris à structurer mon code convenablement pour de meilleures performances et une maintenabilité aisée.",
-    relatedProjects: [2]
+    techs: ["HTML5/CSS3", "JavaScript", "PHP", "React / Vue.js"],
+    desc: "Création d’interfaces réactives et logiques métier complètes.",
+    analyse: "Je conçois des applications web dynamiques et responsives. Du développement orienté front-end interactif avec JavaScript (et des bases en React) au développement back-end logique reposant sur PHP et des architectures MVC, j’ai appris à structurer mon code convenablement pour de meilleures performances et une maintenabilité aisée.",
+    relatedProjects: [1]
   },
   {
     category: "DevOps & Outils",
     icon: <GitBranch className="w-8 h-8 text-orange-400" />,
     techs: ["Git", "GitLab CI", "Linux", "Docker"],
     desc: "Versionning, intégration continue et travail collaboratif.",
-    analyse: "Afin de sécuriser et faciliter le développement, je place au centre de ma méthode de travail le versionnement rigoureux sous Git et l’automatisation des déploiements. J'ai eu l'opportunité de configurer des pipelines d'intégration continue via GitLab CI et j'utilise des systèmes Linux au quotidien, en y greffant des concepts de conteneurisation au moyen de Docker.",
-    relatedProjects: [4, 3]
+    analyse: "Afin de sécuriser et faciliter le développement, je place au centre de ma méthode de travail le versionnement rigoureux sous Git et l’automatisation des déploiements. J’ai eu l’opportunité de configurer des pipelines d’intégration continue via GitLab CI et j’utilise des systèmes Linux au quotidien, en y greffant des concepts de conteneurisation au moyen de Docker.",
+    relatedProjects: [1, 5]
   },
   {
     category: "Agilité & Soft Skills",
     icon: <Users className="w-8 h-8 text-pink-400" />,
     techs: ["Scrum", "Trello", "Communication", "Gestion de conflit"],
     desc: "Organisation en sprints et livraison incrémentale de valeur.",
-    analyse: "Mon adaptabilité et ma capacité à travailler en équipe sont des atouts majeurs. En endossant le rôle de Scrum Master lors de divers projets collaboratifs, j’ai orchestré des rituels agiles (Daily, Sprint Review, Rétrospective) favorisant une livraison de valeur en continu. Ces expériences ont façonné ma communication au sein d'une équipe technique et renforcé mon leadership pour débloquer les situations complexes.",
-    relatedProjects: [4]
+    analyse: "Mon adaptabilité et ma capacité à travailler en équipe sont des atouts majeurs. En endossant le rôle de Scrum Master lors de divers projets collaboratifs, j’ai orchestré des rituels agiles (Daily, Sprint Review, Rétrospective) favorisant une livraison de valeur en continu. Ces expériences ont façonné ma communication au sein d’une équipe technique et renforcé mon leadership pour débloquer les situations complexes.",
+    relatedProjects: [1]
   }
 ];
 
-const projectsData: Project[] = [
-  {
-    id: 1,
-    title: "Jeu Latice (Java)",
-    category: "Application Lourde",
-    role: "Développeur Back-end & Front-end",
-    description: "Implémentation complète d'un jeu de société complexe avec interface graphique. Gestion stricte de l'état du jeu, des règles et de l'IA basique.",
-    fullDescription: "Ce projet consistait à numériser le jeu de société Latice en respectant scrupuleusement les règles officielles. Le défi principal était de concevoir une architecture orientée objet capable de gérer l'état complexe du plateau et les interactions des joueurs en temps réel.",
-    deliverables: ["Code source Java", "Documentation technique (UML)", "Exécutable .jar"],
-    techs: ["Java", "Swing/JavaFX", "POO", "MVC"],
-    icon: <Terminal className="w-12 h-12 text-white opacity-80" />,
-    color: "from-blue-600 to-blue-900",
-    date: "2023"
-  },
-  {
-    id: 2,
-    title: "La Cosina",
-    category: "Full Stack Web",
-    role: "Développeur Full Stack Junior",
-    description: "Développement d'une application web de A à Z pour un restaurant fictif. Création de l'interface client et d'un back-office pour la gestion des menus.",
-    fullDescription: "La Cosina est une plateforme complète permettant aux clients de réserver et de voir le menu, et aux restaurateurs de gérer leurs plats. J'ai dû gérer la persistance des données et créer une interface responsive sans utiliser de frameworks lourds initialement.",
-    deliverables: ["Site Web dynamique", "Manuel utilisateur", "Déploiement local"],
-    techs: ["HTML/CSS", "PHP", "MySQL", "JS"],
-    icon: <Globe className="w-12 h-12 text-white opacity-80" />,
-    color: "from-purple-600 to-purple-900",
-    date: "2023"
-  },
-  {
-    id: 3,
-    title: "Gestion BDD & Admin",
-    category: "Data Engineering",
-    role: "Administrateur BDD",
-    description: "Conception et implémentation d'une base de données PostgreSQL complexe. Écriture de scripts de maintenance et de vues pour le reporting.",
-    fullDescription: "L'objectif était de structurer une base de données cohérente pour une grande quantité de données. J'ai mis en place des contraintes d'intégrité strictes, des triggers pour l'automatisation et des vues pour faciliter l'accès aux données par les non-techniciens.",
-    deliverables: ["Scripts SQL (DDL/DML)", "Procédures stockées", "Dictionnaire de données"],
-    techs: ["PostgreSQL", "PL/pgSQL", "Bash", "Merise"],
-    icon: <Database className="w-12 h-12 text-white opacity-80" />,
-    color: "from-emerald-600 to-emerald-900",
-    date: "2024"
-  },
-  {
-    id: 4,
-    title: "Projet SAE Agile",
-    category: "Gestion de Projet",
-    role: "Product Owner / Scrum Master",
-    description: "Simulation d'un projet réel en équipe. Gestion du backlog, animation des cérémonies (Daily, Review, Retro) et suivi de l'avancement.",
-    fullDescription: "Dans ce projet académique de grande envergure, le défi n'était pas seulement technique mais humain. En tant que Scrum Master, j'ai dû m'assurer que l'équipe restait alignée sur les objectifs du sprint et que la communication était fluide via Trello et Git.",
-    deliverables: ["Backlog produit", "Rapport de projet", "Présentation orale"],
-    techs: ["Trello", "Agile/Scrum", "GitLab", "Jira"],
-    icon: <Users className="w-12 h-12 text-white opacity-80" />,
-    color: "from-pink-600 to-pink-900",
-    date: "2024"
-  }
-];
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -567,6 +491,19 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
               </div>
             </div>
           </div>
+
+          {project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-500 rounded-xl text-slate-300 hover:text-white text-sm font-medium transition-all"
+            >
+              <Github size={16} />
+              Voir le code source
+              <ExternalLink size={14} className="text-slate-500" />
+            </a>
+          )}
         </div>
       </div>
     </div>

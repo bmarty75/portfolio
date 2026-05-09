@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\marty\\\\mon-portfolio\" -Force)",
+      "Bash(Select-Object Name, Mode)",
+      "Bash(grep -E \"\\\\.\\(tsx|jsx|ts|js|css\\)$\")",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)"
+    ]
+  }
+}
