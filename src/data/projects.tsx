@@ -37,7 +37,7 @@ export const projectsData: Project[] = [
       "Scripts de migration vers MySQL",
       "Documentation technique de la nouvelle structure",
     ],
-    techs: ["MySQL", "FoxPro", "SQL"],
+    techs: ["MySQL", "FoxPro", "SQL", "Migration de données", "Analyse BDD"],
     icon: <Database className="w-12 h-12 text-white opacity-80" />,
     color: "from-amber-600 to-orange-900",
     date: "Avr. – Juin 2026",
