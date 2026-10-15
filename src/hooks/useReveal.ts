@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
+/** Part visible de l'élément à partir de laquelle l'animation se déclenche. */
+const SHOW_RATIO = 0.1;
+
 /**
- * Observe un élément et bascule `active` la première fois qu'il entre dans le
- * viewport. L'observation est libérée immédiatement après.
+ * Observe un élément et bascule `active` à chaque fois qu'il entre dans le
+ * viewport. L'état est réinitialisé dès que l'élément en sort entièrement, de
+ * sorte que l'animation se rejoue en remontant comme en redescendant.
  */
 export function useReveal<T extends HTMLElement = HTMLDivElement>() {
   const ref = useRef<T>(null);
@@ -14,13 +18,14 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && entry.intersectionRatio >= SHOW_RATIO) {
           setVisible(true);
-          observer.unobserve(entry.target);
+        } else if (!entry.isIntersecting) {
+          // Masqué uniquement hors écran : aucune disparition visible.
+          setVisible(false);
         }
       },
-      // Déclenche un peu après l'entrée dans l'écran pour que l'animation soit visible.
-      { threshold: 0.1, rootMargin: '0px 0px -12% 0px' },
+      { threshold: [0, SHOW_RATIO] },
     );
 
     observer.observe(el);

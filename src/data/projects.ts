@@ -9,7 +9,7 @@ export const featuredProject: FeaturedProject = {
   context:
     'Commanditaire réel : Mme Sarlot · IUT du Limousin · Projet de 2e année mené en équipe de 5 développeurs.',
   description:
-    "Conception et déploiement en conditions réelles d'une application d'entreprise pour l'administration du département Informatique. L'architecture sépare strictement la logique métier, exposée par une API REST sécurisée, d'un front-end Vue.js, le tout conteneurisé sur le serveur Linux de l'université.",
+    "Conception et déploiement d'une application d'entreprise pour l'administration du département Informatique. L'architecture sépare strictement la logique métier, exposée par une API REST sécurisée, d'un front-end Vue.js, le tout conteneurisé sur le serveur Linux de l'université.",
   modules: [
     { icon: ShieldCheck, label: 'Authentification stateless JWT & gestion des habilitations' },
     { icon: Network, label: 'Maquette pédagogique (UE, compétences, SAÉ, coefficients)' },
@@ -28,7 +28,7 @@ export const featuredProject: FeaturedProject = {
   specsNote: 'Documentation API : Swagger / OpenAPI 3',
   platform: 'Debian Linux',
   techs: ['Java 21', 'Spring Boot 3.3', 'PostgreSQL', 'Flyway', 'Docker', 'Vue.js'],
-  status: 'Déployé en production',
+  status: "Déployé sur le serveur de l'IUT",
   githubUrl: 'https://github.com/AbdelmalikMoussaoui/SAE_ERP',
 };
 

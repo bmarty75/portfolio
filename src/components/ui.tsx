@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { techLogos } from '../data/techLogos';
 import { useReveal } from '../hooks/useReveal';
 
-/** Révèle son contenu la première fois qu'il entre dans le viewport. */
+/** Révèle son contenu à chaque fois qu'il entre dans le viewport. */
 export const Reveal = ({
   children,
   delay = 0,
