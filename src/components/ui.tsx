@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
+import { techDetails } from '../data/techDetails';
 import { techLogos } from '../data/techLogos';
 import { useReveal } from '../hooks/useReveal';
+import { useTechDialog } from '../lib/techDialog';
 
 /** Révèle son contenu à chaque fois qu'il entre dans le viewport. */
 export const Reveal = ({
@@ -103,21 +105,39 @@ export const TechIcon = ({ name, size = 16 }: { name: string; size?: number }) =
   );
 };
 
-/** Étiquette technique monospace, précédée du logo de la technologie s'il existe. */
+/**
+ * Étiquette technique monospace, précédée du logo de la technologie s'il existe.
+ * Cliquable lorsqu'une fiche explicative est disponible.
+ */
 export const Chip = ({
   label,
   className = 'bg-surface-container text-on-surface',
 }: {
   label: string;
   className?: string;
-}) => (
-  <span
-    className={`inline-flex items-center gap-1.5 rounded px-2 py-1 font-mono text-code-sm ${className}`}
-  >
-    <TechIcon name={label} size={13} />
-    {label}
-  </span>
-);
+}) => {
+  const openTech = useTechDialog();
+  const base = `inline-flex items-center gap-1.5 rounded px-2 py-1 font-mono text-code-sm ${className}`;
+  const content = (
+    <>
+      <TechIcon name={label} size={13} />
+      {label}
+    </>
+  );
+
+  if (!techDetails[label]) return <span className={base}>{content}</span>;
+  return (
+    <button
+      type="button"
+      onClick={() => openTech(label)}
+      aria-haspopup="dialog"
+      title={`En savoir plus : ${label}`}
+      className={`${base} cursor-pointer ring-1 ring-transparent transition-shadow hover:ring-primary/50`}
+    >
+      {content}
+    </button>
+  );
+};
 
 /** Monogramme affiché dans l'en-tête et le pied de page. */
 export const Monogram = () => (

@@ -4,6 +4,17 @@ import type { SimpleIcon } from 'simple-icons';
 /** Logo d'une technologie : marque (Simple Icons) ou icône générique Lucide. */
 export type TechLogo = SimpleIcon | LucideIcon;
 
+/** Fiche explicative d'une technologie, affichée au clic sur son étiquette. */
+export interface TechInfo {
+  /** Nom complet affiché en titre de la fiche. */
+  name: string;
+  category: string;
+  /** Ce qu'est la technologie, en quelques phrases. */
+  summary: string;
+  /** Où et comment je l'ai utilisée. */
+  usage?: string;
+}
+
 /** Point fort illustré par une icône (modules, livrables…). */
 export interface Highlight {
   icon: LucideIcon;

@@ -66,3 +66,25 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── Fiche technique (modale) ─────────────────────────────────────────── */
+.tech-dialog[open] {
+  animation: tech-dialog-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tech-dialog[open]::backdrop {
+  animation: tech-backdrop-in 0.25s ease-out;
+}
+
+@keyframes tech-dialog-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+}
+
+@keyframes tech-backdrop-in {
+  from { opacity: 0; }
+}
+
+/* Bloque le défilement de la page tant qu'une fiche est ouverte. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
