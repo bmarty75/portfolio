@@ -19,7 +19,8 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>() {
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
+      // Déclenche un peu après l'entrée dans l'écran pour que l'animation soit visible.
+      { threshold: 0.1, rootMargin: '0px 0px -12% 0px' },
     );
 
     observer.observe(el);

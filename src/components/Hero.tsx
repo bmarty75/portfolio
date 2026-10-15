@@ -1,127 +1,77 @@
-import { useEffect, useState } from 'react';
-import { TerminalSquare, Network, Copy } from 'lucide-react';
-import { IDENTITY, ALTERNANCE } from '../lib/constants';
-import { Terminal } from './Terminal';
-
-const specs = [
-  { label: 'Stack', value: 'Java & Python', tone: 'text-emerald-400' },
-  { label: 'Localisation', value: 'Limoges & Remote', tone: 'text-cyan-400' },
-  { label: 'Mindset', value: 'Rigueur & collectif', tone: 'text-amber-400' },
-];
-
-/** Bouton copiant l'adresse e-mail dans le presse-papiers. */
-const CopyEmailButton = () => {
-  const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    if (!copied) return;
-    const id = window.setTimeout(() => setCopied(false), 2200);
-    return () => window.clearTimeout(id);
-  }, [copied]);
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(IDENTITY.email);
-      setCopied(true);
-    } catch {
-      /* Presse-papiers indisponible : on ouvre le client mail en repli. */
-      window.location.href = `mailto:${IDENTITY.email}`;
-    }
-  };
-
-  return (
-    <button
-      type="button"
-      onClick={copy}
-      className="group inline-flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 px-3 py-3 font-mono text-xs text-slate-400 transition-colors hover:text-emerald-400"
-    >
-      {copied ? (
-        <span className="text-emerald-400">Email copié !</span>
-      ) : (
-        <>
-          <span className="text-emerald-500">$</span>
-          <span>curl contact</span>
-          <Copy size={14} className="opacity-70 transition-opacity group-hover:opacity-100" />
-        </>
-      )}
-    </button>
-  );
-};
+import { ArrowDown, FileText, Github, Linkedin } from 'lucide-react';
+import { ALTERNANCE, EXTERNAL, IDENTITY } from '../lib/constants';
 
 export const Hero = () => (
-  <section id="top" className="relative w-full overflow-hidden pb-20 pt-10 md:pb-28 md:pt-16">
-    {/* Halos ambiants */}
-    <div className="pointer-events-none absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-cyan-500/10 blur-[120px]" aria-hidden />
-    <div className="pointer-events-none absolute right-1/4 top-1/3 h-96 w-96 rounded-full bg-emerald-500/10 blur-[140px]" aria-hidden />
+  <section id="about" className="flex scroll-mt-24 flex-col items-start gap-space-lg pt-space-md">
+    {/* Statut */}
+    <div className="inline-flex items-center gap-space-sm rounded-2xl bg-surface-container-low px-space-md py-1.5 font-mono text-label-caps tracking-wider text-on-surface-variant shadow-sm">
+      <span className="inline-block h-2 w-2 shrink-0 animate-pulse rounded-full bg-primary" aria-hidden />
+      <span>
+        En alternance chez {ALTERNANCE.company} — {ALTERNANCE.period} ({ALTERNANCE.duration})
+      </span>
+    </div>
 
-    <div className="mx-auto max-w-[1240px] px-4 sm:px-6">
-      <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10">
-        {/* Colonne gauche */}
-        <div className="flex flex-col gap-5 text-left lg:col-span-6">
-          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 font-mono text-xs text-emerald-400">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" aria-hidden />
-            <span>EN ALTERNANCE — {ALTERNANCE.company.toUpperCase()}</span>
-            <span className="text-slate-500" aria-hidden>•</span>
-            <span className="text-slate-300">{ALTERNANCE.year}</span>
-          </div>
+    {/* Identité */}
+    <div className="flex max-w-4xl flex-col gap-space-xs">
+      <div className="flex flex-wrap items-baseline gap-x-space-md gap-y-1">
+        <span className="font-mono text-label-caps uppercase tracking-widest text-primary">
+          Ingénieur logiciel junior
+        </span>
+        <span className="font-mono text-code-sm text-outline">/ BUT Informatique 3e année</span>
+      </div>
 
-          <h1 className="font-display text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl">
-            {IDENTITY.firstName}{' '}
-            <span className="bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
-              {IDENTITY.lastName}
-            </span>
-          </h1>
+      <h1 className="text-display-hero-mobile font-semibold tracking-tight text-on-surface md:text-display-hero">
+        {IDENTITY.firstName} {IDENTITY.lastName}
+      </h1>
 
-          <div className="flex items-center gap-2 font-mono text-lg font-medium text-cyan-300 sm:text-xl">
-            <span className="text-emerald-400">&gt;</span>
-            <span>{IDENTITY.role}</span>
-          </div>
+      <p className="text-headline-md font-medium tracking-tight text-primary">{IDENTITY.role}</p>
 
-          <p className="font-sans text-base leading-relaxed text-slate-300 sm:text-lg">
-            Étudiant en{' '}
-            <strong className="font-semibold text-white">
-              3ème année de BUT Informatique à l&apos;IUT du Limousin
-            </strong>
-            , passionné par la modélisation logicielle résiliente, les architectures modulaires et
-            les applications menées de bout en bout, de la base de données à l&apos;interface.
-          </p>
+      <p className="mt-space-sm max-w-3xl text-body-lg leading-relaxed text-on-surface-variant">
+        Étudiant en 3<sup>e</sup> année de BUT Informatique à l&apos;IUT du Limousin, en alternance
+        chez {ALTERNANCE.company}. Je conçois des architectures applicatives fiables, modulaires et
+        maintenables, avec une affinité prononcée pour l&apos;écosystème Java, Spring Boot 3 et les
+        bases relationnelles PostgreSQL.
+      </p>
+    </div>
 
-          {/* Indicateurs rapides */}
-          <div className="grid grid-cols-3 gap-3 py-1 font-mono text-xs">
-            {specs.map(spec => (
-              <div key={spec.label} className="rounded-lg border border-slate-800 bg-slate-900/80 p-2.5">
-                <div className="text-[10px] uppercase text-slate-400">{spec.label}</div>
-                <div className={`mt-0.5 font-semibold ${spec.tone}`}>{spec.value}</div>
-              </div>
-            ))}
-          </div>
+    {/* Actions & profils */}
+    <div className="flex w-full flex-wrap items-center gap-space-md pt-space-sm">
+      <a
+        href="#projets"
+        className="inline-flex items-center justify-center rounded bg-on-surface px-space-lg py-2.5 text-body-sm font-semibold text-surface shadow-md transition-all hover:bg-white"
+      >
+        <span>Explorer les projets</span>
+        <ArrowDown size={16} className="ml-1.5" />
+      </a>
 
-          {/* Actions */}
-          <div className="flex flex-wrap items-center gap-3 pt-2">
-            <a
-              href="#projets"
-              className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-3 font-mono text-sm font-semibold text-slate-950 shadow-[0_0_20px_rgba(56,189,248,0.3)] transition-all hover:from-cyan-400 hover:to-blue-500 active:scale-95"
-            >
-              <TerminalSquare size={18} />
-              <span>Explorer les Projets</span>
-            </a>
+      <a
+        href={IDENTITY.cv}
+        download
+        className="inline-flex items-center justify-center rounded bg-surface-container px-space-md py-2.5 text-body-sm text-on-surface shadow-sm transition-colors hover:bg-surface-container-high"
+      >
+        <FileText size={16} className="mr-1.5 text-primary" />
+        <span>Télécharger le CV (PDF)</span>
+      </a>
 
-            <a
-              href="#architecture"
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-700/80 bg-slate-900 px-4 py-3 font-mono text-sm text-slate-200 transition-all hover:border-cyan-500/50 hover:bg-slate-800"
-            >
-              <Network size={18} className="text-cyan-400" />
-              <span>Voir l&apos;Architecture ERP</span>
-            </a>
+      <span className="mx-space-xs hidden h-6 w-px bg-surface-variant sm:block" aria-hidden />
 
-            <CopyEmailButton />
-          </div>
-        </div>
-
-        {/* Colonne droite */}
-        <div className="min-w-0 lg:col-span-6">
-          <Terminal />
-        </div>
+      <div className="flex flex-wrap items-center gap-space-sm">
+        <a
+          href={IDENTITY.github}
+          {...EXTERNAL}
+          className="inline-flex items-center gap-1.5 rounded px-space-sm py-2 font-mono text-code-sm text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface"
+        >
+          <Github size={16} />
+          <span>github/bmarty75</span>
+        </a>
+        <a
+          href={IDENTITY.linkedin}
+          {...EXTERNAL}
+          className="inline-flex items-center gap-1.5 rounded px-space-sm py-2 font-mono text-code-sm text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface"
+        >
+          <Linkedin size={16} />
+          <span>linkedin/benjamin-marty-info</span>
+        </a>
       </div>
     </div>
   </section>

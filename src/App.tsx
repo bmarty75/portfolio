@@ -1,8 +1,6 @@
-import { ShaderBackground } from './components/ShaderBackground';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { Architecture } from './components/Architecture';
-import { About } from './components/About';
+import { KeyFacts } from './components/KeyFacts';
 import { Experience } from './components/Experience';
 import { Projects } from './components/Projects';
 import { Skills } from './components/Skills';
@@ -11,22 +9,27 @@ import { Footer } from './components/Footer';
 
 export default function App() {
   return (
-    <div className="relative min-h-screen bg-[#090d14] text-slate-100 antialiased">
-      <ShaderBackground />
+    <div className="flex min-h-screen flex-col bg-surface text-on-surface">
+      <Navbar />
 
-      <div className="relative z-10 flex min-h-screen flex-col">
-        <Navbar />
-        <main className="flex-grow">
+      <main className="relative w-full flex-grow overflow-hidden pt-16">
+        {/* Halo ambiant discret en haut de page */}
+        <div
+          className="pointer-events-none absolute left-1/2 top-0 h-[360px] w-[980px] -translate-x-1/2 bg-gradient-to-b from-primary/10 via-primary-container/5 to-transparent blur-[120px]"
+          aria-hidden
+        />
+
+        <div className="relative mx-auto flex max-w-page flex-col gap-space-3xl px-margin-mobile pb-space-3xl pt-space-xl md:px-margin">
           <Hero />
-          <Architecture />
-          <About />
+          <KeyFacts />
           <Experience />
           <Projects />
           <Skills />
           <Contact />
-        </main>
-        <Footer />
-      </div>
+        </div>
+      </main>
+
+      <Footer />
     </div>
   );
 }

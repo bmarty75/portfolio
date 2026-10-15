@@ -23,42 +23,66 @@ export const Reveal = ({
   );
 };
 
-/** Bandeau titre d'une section : pastille monospace + titre display. */
-export const SectionHeading = ({
-  eyebrow,
-  icon,
-  title,
-  tone = 'cyan',
-  className = '',
+/** Libellé monospace en capitales (sur-titres, étiquettes de cartes). */
+export const Eyebrow = ({
+  children,
+  className = 'text-outline',
 }: {
-  eyebrow: string;
-  icon: ReactNode;
-  title: ReactNode;
-  tone?: 'cyan' | 'emerald';
+  children: ReactNode;
   className?: string;
 }) => (
-  <div className={className}>
-    <div
-      className={`mb-1 flex items-center gap-2 font-mono text-xs ${
-        tone === 'cyan' ? 'text-cyan-400' : 'text-emerald-400'
-      }`}
-    >
-      {icon}
-      <span>{eyebrow}</span>
+  <span className={`font-mono text-label-caps uppercase tracking-wider ${className}`}>
+    {children}
+  </span>
+);
+
+/** En-tête de section : sur-titre accentué suivi d'un filet, puis titre. */
+export const SectionHeading = ({ eyebrow, title }: { eyebrow: string; title: ReactNode }) => (
+  <div className="flex flex-col gap-space-xs">
+    <div className="flex items-center gap-2">
+      <Eyebrow className="tracking-widest text-primary">{eyebrow}</Eyebrow>
+      <span className="h-px w-8 bg-surface-variant" aria-hidden />
     </div>
-    <h2 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
+    <h2 className="text-headline-lg-mobile font-semibold tracking-tight text-on-surface md:text-headline-lg">
       {title}
     </h2>
   </div>
 );
 
+/** Carte de base de la maquette : surface surélevée, sans bordure. */
+export const Card = ({
+  children,
+  className = '',
+  id,
+  as: Tag = 'div',
+}: {
+  children: ReactNode;
+  className?: string;
+  id?: string;
+  as?: 'div' | 'article' | 'section';
+}) => (
+  <Tag id={id} className={`rounded-xl bg-surface-container-low shadow-sm ${className}`}>
+    {children}
+  </Tag>
+);
+
 /** Étiquette technique monospace. */
-export const Chip = ({ label, className = '' }: { label: string; className?: string }) => (
+export const Chip = ({
+  label,
+  className = 'bg-surface-container text-on-surface',
+}: {
+  label: string;
+  className?: string;
+}) => (
+  <span className={`rounded px-2 py-1 font-mono text-code-sm ${className}`}>{label}</span>
+);
+
+/** Monogramme affiché dans l'en-tête et le pied de page. */
+export const Monogram = () => (
   <span
-    className={`rounded border border-slate-700 bg-slate-800 px-2 py-0.5 font-mono text-xs ${
-      className || 'text-slate-300'
-    }`}
+    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-surface-container font-mono text-[12px] font-medium text-primary"
+    aria-hidden
   >
-    {label}
+    BM
   </span>
 );

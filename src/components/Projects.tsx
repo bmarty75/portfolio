@@ -1,8 +1,8 @@
-import { ArrowUpRight, BadgeCheck, Check, Code2, ExternalLink, Layers, TerminalSquare } from 'lucide-react';
-import { featuredProject, featuredStack, projects } from '../data/projects';
+import { ArrowUpRight, Check, CircleCheck, SquareTerminal } from 'lucide-react';
+import { featuredProject, projects } from '../data/projects';
 import type { Project } from '../types';
-import { IDENTITY } from '../lib/constants';
-import { Reveal, SectionHeading } from './ui';
+import { EXTERNAL } from '../lib/constants';
+import { Card, Chip, Eyebrow, Reveal, SectionHeading } from './ui';
 
 /* ── Projet phare ─────────────────────────────────────────────────────── */
 
@@ -10,197 +10,154 @@ const FeaturedProject = () => {
   const p = featuredProject;
 
   return (
-    <article className="group relative w-full overflow-hidden rounded-2xl border border-cyan-500/30 bg-gradient-to-br from-slate-900 via-[#0d1422] to-slate-950 p-6 shadow-2xl transition-all hover:border-cyan-400/60 sm:p-9">
-      <div className="pointer-events-none absolute right-0 top-0 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden />
-
-      <div className="relative z-10 flex flex-col gap-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+    <Card as="article" className="flex flex-col gap-space-lg p-space-lg md:p-space-xl">
+      {/* En-tête */}
+      <div className="flex flex-col justify-between gap-space-sm md:flex-row md:items-center">
+        <div className="space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded border border-emerald-500/40 bg-emerald-500/20 px-3 py-1 font-mono text-xs font-bold tracking-wider text-emerald-300">
-              {p.status}
+            <span className="rounded bg-primary/10 px-2 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-primary">
+              {p.badge}
             </span>
-            <span className="font-mono text-xs uppercase text-slate-400">{p.category}</span>
+            <span className="font-mono text-code-sm text-outline">{p.period}</span>
           </div>
-
-          {p.githubUrl && (
-            <a
-              href={p.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 font-mono text-xs text-slate-200 transition-colors hover:bg-slate-700"
-            >
-              <Code2 size={15} />
-              <span>Code source GitHub</span>
-              <ArrowUpRight size={13} />
-            </a>
-          )}
-        </div>
-
-        <div>
-          <h3 className="font-display text-2xl font-bold text-white transition-colors group-hover:text-cyan-300 sm:text-3xl">
+          <h3 className="text-headline-lg-mobile font-semibold text-on-surface md:text-headline-lg">
             {p.title}
           </h3>
-          <div className="mt-2 flex flex-wrap items-center gap-3 font-mono text-xs text-slate-400">
-            <span className="font-semibold text-cyan-400">{p.meta?.[0]}</span>
-            <span aria-hidden>•</span>
-            <span>{p.meta?.[1]}</span>
-            <span aria-hidden>•</span>
-            <span>{p.meta?.[2]}</span>
-            <span aria-hidden>•</span>
-            <span className="text-emerald-400">Commanditaire réel : Mme Sarlot</span>
-          </div>
+          <p className="text-body-md text-on-surface-variant">{p.context}</p>
         </div>
 
-        <p className="font-sans text-sm leading-relaxed text-slate-300 sm:text-base">
-          Conception intégrale et déploiement en conditions réelles d&apos;une application
-          d&apos;entreprise pour l&apos;administration de l&apos;IUT du Limousin. En équipe de 5
-          étudiants développeurs, nous avons implémenté{' '}
-          <strong className="text-white">6 modules métier complets</strong> : authentification
-          stateless JWT avec gestion fine des habilitations via{' '}
-          <strong className="text-cyan-300">Spring Security</strong>, gestion de la maquette
-          pédagogique, fiches ressources universitaires, module TAC, suivi des heures
-          d&apos;enseignement et collecte des feedbacks. L&apos;infrastructure est hébergée sur le
-          serveur Linux Debian de l&apos;université avec conteneurisation Docker, proxy Nginx et
-          migrations automatisées Flyway.
-        </p>
+        {p.githubUrl && (
+          <a
+            href={p.githubUrl}
+            {...EXTERNAL}
+            className="inline-flex shrink-0 items-center gap-1 self-start rounded bg-surface-container px-2 py-1 font-mono text-code-sm text-outline transition-colors hover:bg-surface-container-high hover:text-on-surface md:self-auto"
+          >
+            Code source
+            <ArrowUpRight size={14} aria-hidden />
+          </a>
+        )}
+      </div>
 
-        {/* Panneaux livrables / stack */}
-        <div className="grid grid-cols-1 gap-4 pt-2 md:grid-cols-2">
-          <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4">
-            <div className="flex items-center gap-2 font-mono text-xs font-semibold text-white">
-              <BadgeCheck size={18} className="text-emerald-400" />
-              <span>Livrables &amp; Garanties Qualité</span>
-            </div>
-            <ul className="space-y-2 font-sans text-xs text-slate-300">
-              {p.deliverables.map(item => (
-                <li key={item} className="flex items-start gap-2">
-                  <Check size={16} className="shrink-0 text-cyan-400" />
-                  <span>{item}</span>
+      {/* Description & spécifications */}
+      <div className="grid grid-cols-1 gap-space-lg pt-space-xs lg:grid-cols-12">
+        <div className="space-y-space-md lg:col-span-7">
+          <p className="text-body-md leading-relaxed text-on-surface-variant">{p.description}</p>
+
+          <div className="space-y-space-sm">
+            <Eyebrow>{p.modules.length} modules métier intégrés</Eyebrow>
+            <ul className="grid grid-cols-1 gap-2 text-body-sm text-on-surface sm:grid-cols-2">
+              {p.modules.map(({ icon: Icon, label }, i) => (
+                <li key={label}>
+                  <Reveal
+                    delay={250 + i * 80}
+                    className="flex h-full items-start gap-2 rounded bg-surface-container p-2.5"
+                  >
+                    <Icon size={16} className="mt-0.5 shrink-0 text-primary" aria-hidden />
+                    <span>{label}</span>
+                  </Reveal>
                 </li>
               ))}
             </ul>
           </div>
+        </div>
 
-          <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4">
-            <div className="flex items-center gap-2 font-mono text-xs font-semibold text-white">
-              <Layers size={18} className="text-cyan-400" />
-              <span>Stack de Déploiement</span>
+        <div className="flex flex-col justify-between space-y-space-md rounded-lg bg-surface-container-lowest p-space-md font-mono text-code-sm lg:col-span-5">
+          <div>
+            <div className="mb-2 flex items-center justify-between gap-2 pb-2 text-outline">
+              <Eyebrow>Spécifications techniques</Eyebrow>
+              <span>{p.platform}</span>
             </div>
-            <div className="flex flex-wrap gap-1.5 font-mono text-xs">
-              {featuredStack.map(tech => (
-                <span key={tech.label} className={`rounded border px-2 py-0.5 ${tech.tone}`}>
-                  {tech.label}
-                </span>
+            <dl className="space-y-1.5">
+              {p.specs.map(spec => (
+                <div key={spec.key} className="flex justify-between gap-space-md py-1">
+                  <dt className="shrink-0 text-outline">{spec.key} :</dt>
+                  <dd className="text-right font-medium text-on-surface">{spec.value}</dd>
+                </div>
               ))}
-            </div>
+            </dl>
+          </div>
+          <div className="flex items-center gap-1.5 pt-space-xs text-[12px] text-outline">
+            <SquareTerminal size={16} className="shrink-0 text-primary" aria-hidden />
+            <span>{p.specsNote}</span>
           </div>
         </div>
       </div>
-    </article>
+
+      {/* Pied */}
+      <div className="flex flex-wrap items-center justify-between gap-space-md pt-space-xs">
+        <div className="flex flex-wrap items-center gap-space-xs">
+          {p.techs.map(tech => (
+            <Chip key={tech} label={tech} />
+          ))}
+        </div>
+        <span className="flex items-center gap-1 text-body-sm text-primary">
+          <CircleCheck size={18} aria-hidden />
+          {p.status}
+        </span>
+      </div>
+    </Card>
   );
 };
 
-/* ── Projet secondaire ────────────────────────────────────────────────── */
+/* ── Projet complémentaire ────────────────────────────────────────────── */
 
-const ProjectCard = ({ project, tone }: { project: Project; tone: 'cyan' | 'teal' }) => (
-  <article className="group flex flex-col justify-between rounded-2xl border border-slate-800 bg-slate-900/80 p-6 transition-all hover:border-slate-700 hover:shadow-xl">
-    <div className="space-y-4">
-      <div className="flex items-center justify-between font-mono text-xs text-slate-400">
-        <span className={`uppercase ${tone === 'cyan' ? 'text-cyan-400' : 'text-teal-400'}`}>
-          {project.category}
-        </span>
-        <span>{project.date}</span>
+const ProjectCard = ({ project }: { project: Project }) => (
+  <Card as="article" className="flex h-full flex-col justify-between gap-space-md p-space-lg">
+    <div className="space-y-space-sm">
+      <div className="flex items-center justify-between gap-space-sm">
+        <Eyebrow className="text-primary">{project.category}</Eyebrow>
+        <span className="font-mono text-code-sm text-outline">{project.date}</span>
       </div>
+      <h3 className="text-headline-md font-semibold text-on-surface">{project.title}</h3>
+      <p className="text-body-md leading-relaxed text-on-surface-variant">{project.description}</p>
+      <ul className="space-y-1.5 pt-1 text-body-sm text-on-surface-variant">
+        {project.points.map(point => (
+          <li key={point} className="flex items-start gap-2">
+            <Check size={15} className="mt-0.5 shrink-0 text-primary" aria-hidden />
+            <span>{point}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
 
-      <h3
-        className={`font-display text-xl font-bold text-white transition-colors ${
-          tone === 'cyan' ? 'group-hover:text-cyan-300' : 'group-hover:text-teal-300'
-        }`}
-      >
-        {project.title}
-      </h3>
-
-      <p className="font-mono text-xs text-emerald-400">{project.role}</p>
-
-      <p className="font-sans text-xs leading-relaxed text-slate-300 sm:text-sm">
-        {project.fullDescription}
-      </p>
-
-      <div className="flex flex-wrap gap-1.5 pt-1 font-mono text-xs">
-        {project.techs.map((tech, i) => (
-          <span
-            key={tech}
-            className={`rounded border border-slate-700 bg-slate-800 px-2 py-0.5 ${
-              i === 0 ? 'text-cyan-300' : i === project.techs.length - 1 ? 'text-emerald-300' : 'text-slate-300'
-            }`}
-          >
-            {tech}
-          </span>
+    <div className="flex flex-wrap items-end justify-between gap-space-sm pt-space-sm">
+      <div className="flex flex-wrap gap-space-xs">
+        {project.techs.map(tech => (
+          <Chip key={tech} label={tech} />
         ))}
       </div>
-    </div>
-
-    <div className="mt-5 flex items-center justify-between border-t border-slate-800 pt-5">
-      {project.githubUrl ? (
+      {project.githubUrl && (
         <a
           href={project.githubUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 font-mono text-xs text-cyan-400 transition-colors hover:text-cyan-300"
+          {...EXTERNAL}
+          className="inline-flex items-center gap-1 font-mono text-code-sm text-outline transition-colors hover:text-primary"
         >
-          <span>Explorer sur GitHub</span>
-          <ArrowUpRight size={14} />
+          GitHub
+          <ArrowUpRight size={14} aria-hidden />
         </a>
-      ) : (
-        <span className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-500">
-          <TerminalSquare size={14} /> Projet académique
-        </span>
-      )}
-      {project.footerNote && (
-        <span className="font-mono text-[11px] text-slate-500">{project.footerNote}</span>
       )}
     </div>
-  </article>
+  </Card>
 );
 
 /* ── Section ──────────────────────────────────────────────────────────── */
 
 export const Projects = () => (
-  <section id="projets" className="relative w-full py-20">
-    <div className="mx-auto max-w-[1240px] px-4 sm:px-6">
-      <Reveal>
-        <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <SectionHeading
-            eyebrow="RÉALISATIONS MAJEURES"
-            icon={<TerminalSquare size={16} />}
-            tone="emerald"
-            title={<>Projets &amp; Ingénierie Logicielle</>}
-          />
-          <a
-            href={IDENTITY.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex shrink-0 items-center gap-1.5 font-mono text-xs text-cyan-400 transition-colors hover:text-cyan-300"
-          >
-            <span>{IDENTITY.githubHandle}</span>
-            <ExternalLink size={15} />
-          </a>
-        </div>
-      </Reveal>
+  <section id="projets" className="flex scroll-mt-24 flex-col gap-space-lg">
+    <Reveal>
+      <SectionHeading eyebrow="Travaux d'ingénierie" title="Réalisations & Architectures" />
+    </Reveal>
 
-      <div className="flex flex-col gap-8">
-        <Reveal delay={100}>
-          <FeaturedProject />
+    <Reveal delay={80}>
+      <FeaturedProject />
+    </Reveal>
+
+    <div className="grid grid-cols-1 gap-gutter md:grid-cols-2">
+      {projects.map((project, i) => (
+        <Reveal key={project.title} delay={(i % 2) * 120} className="h-full">
+          <ProjectCard project={project} />
         </Reveal>
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {projects.map((project, i) => (
-            <Reveal key={project.id} delay={140 + i * 90} className="h-full">
-              <ProjectCard project={project} tone={i === 0 ? 'cyan' : 'teal'} />
-            </Reveal>
-          ))}
-        </div>
-      </div>
+      ))}
     </div>
   </section>
 );

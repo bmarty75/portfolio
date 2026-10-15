@@ -1,108 +1,104 @@
-import { Github, Linkedin, Mail, MapPin, Phone, Radio } from 'lucide-react';
+import { ArrowRight, Github, Linkedin, Mail, Phone } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { IDENTITY, ALTERNANCE } from '../lib/constants';
-import { Reveal } from './ui';
+import { ALTERNANCE, EXTERNAL, IDENTITY, PHONE_HREF } from '../lib/constants';
+import { Card, Eyebrow, Reveal, SectionHeading } from './ui';
 
-interface Channel {
-  label: string;
-  value: string;
+const DirectChannel = ({
+  href,
+  icon: Icon,
+  label,
+  value,
+}: {
   href: string;
   icon: LucideIcon;
-  tone: string;
-  external?: boolean;
-}
+  label: string;
+  value: string;
+}) => (
+  <a
+    href={href}
+    className="group flex items-center justify-between gap-space-md rounded-lg bg-surface-container p-space-md transition-colors hover:bg-surface-container-high"
+  >
+    <div className="flex min-w-0 items-center gap-space-md">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-surface-container-low text-primary transition-transform group-hover:scale-105">
+        <Icon size={20} aria-hidden />
+      </span>
+      <div className="min-w-0">
+        <Eyebrow>{label}</Eyebrow>
+        <div className="truncate text-body-md font-medium text-on-surface">{value}</div>
+      </div>
+    </div>
+    <ArrowRight
+      size={20}
+      className="shrink-0 text-outline transition-colors group-hover:text-primary"
+      aria-hidden
+    />
+  </a>
+);
 
-const channels: Channel[] = [
-  {
-    label: 'Email Universitaire',
-    value: IDENTITY.email,
-    href: `mailto:${IDENTITY.email}`,
-    icon: Mail,
-    tone: 'group-hover:border-cyan-500/50 group-hover:text-cyan-300',
-  },
-  {
-    label: 'Téléphone Direct',
-    value: IDENTITY.phone,
-    href: `tel:${IDENTITY.phone.replace(/\s/g, '')}`,
-    icon: Phone,
-    tone: 'group-hover:border-emerald-500/50 group-hover:text-emerald-300',
-  },
-  {
-    label: 'LinkedIn Profil',
-    value: IDENTITY.linkedinHandle,
-    href: IDENTITY.linkedin,
-    icon: Linkedin,
-    tone: 'group-hover:border-blue-500/50 group-hover:text-blue-300',
-    external: true,
-  },
-  {
-    label: 'Dépôts GitHub',
-    value: IDENTITY.githubHandle,
-    href: IDENTITY.github,
-    icon: Github,
-    tone: 'group-hover:border-violet-500/50 group-hover:text-violet-300',
-    external: true,
-  },
-];
+const Profile = ({
+  href,
+  icon: Icon,
+  label,
+  value,
+}: {
+  href: string;
+  icon: LucideIcon;
+  label: string;
+  value: string;
+}) => (
+  <a
+    href={href}
+    {...EXTERNAL}
+    className="group flex min-w-0 items-center gap-2 rounded-lg bg-surface-container p-space-md transition-colors hover:bg-surface-container-high"
+  >
+    <Icon size={18} className="shrink-0 text-outline group-hover:text-primary" aria-hidden />
+    <div className="min-w-0">
+      <div className="font-mono text-label-caps text-outline">{label}</div>
+      <div className="truncate font-mono text-code-sm text-on-surface">{value}</div>
+    </div>
+  </a>
+);
 
 export const Contact = () => (
-  <section id="contact" className="relative w-full overflow-hidden py-20">
-    <div className="pointer-events-none absolute left-1/2 top-1/4 h-96 w-[720px] -translate-x-1/2 rounded-full bg-emerald-500/10 blur-[140px]" aria-hidden />
-
-    <div className="relative mx-auto max-w-[1240px] px-4 sm:px-6">
-      <Reveal>
-        <div className="mx-auto max-w-2xl text-center">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 font-mono text-xs text-emerald-400">
-            <Radio size={14} />
-            <span>CANAL DE COMMUNICATION OUVERT</span>
-          </div>
-
-          <h2 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Initier une connexion professionnelle
-          </h2>
-
-          <p className="mx-auto mt-4 max-w-lg font-sans text-base leading-relaxed text-slate-300">
-            Actuellement en alternance chez {ALTERNANCE.company}. Une question sur un projet, une
-            architecture ou une techno de ma stack ? Les canaux ci-dessous sont ouverts.
-          </p>
+  <Reveal>
+    <Card
+      as="section"
+      id="contact"
+      className="flex scroll-mt-24 flex-col justify-between gap-space-xl p-space-lg md:flex-row md:p-space-xl"
+    >
+      <div className="space-y-space-md md:w-1/2">
+        <SectionHeading eyebrow="Contact" title="Entrons en contact" />
+        <p className="text-body-lg leading-relaxed text-on-surface-variant">
+          Actuellement en alternance chez{' '}
+          <strong className="font-medium text-on-surface">{ALTERNANCE.company}</strong> jusqu&apos;en
+          juillet 2027. Une question sur un projet, une architecture ou une technologie de ma stack ?
+          Échangeons sur vos besoins applicatifs et la suite de mon parcours.
+        </p>
+        <div className="flex items-center gap-2 pt-2 font-mono text-code-sm text-outline">
+          <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-primary" aria-hidden />
+          <span>Localisation : {IDENTITY.location} · Mobilité Limousin &amp; Télétravail</span>
         </div>
-      </Reveal>
-
-      <div className="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {channels.map((channel, i) => {
-          const { icon: Icon } = channel;
-          return (
-            <Reveal key={channel.label} delay={i * 80} className="h-full">
-              <a
-                href={channel.href}
-                {...(channel.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                className="group flex h-full flex-col items-center rounded-2xl border border-slate-800 bg-slate-900/80 px-4 py-7 text-center transition-all hover:border-slate-700 hover:shadow-xl"
-              >
-                <span
-                  className={`mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-800 bg-slate-950/70 text-slate-400 transition-all ${channel.tone}`}
-                >
-                  <Icon size={18} />
-                </span>
-                <p className="font-mono text-[11px] uppercase tracking-wider text-slate-400">
-                  {channel.label}
-                </p>
-                <p className="mt-1.5 break-all font-mono text-xs text-slate-200">{channel.value}</p>
-              </a>
-            </Reveal>
-          );
-        })}
       </div>
 
-      <Reveal delay={200}>
-        <p className="mt-10 flex flex-wrap items-center justify-center gap-2 font-mono text-xs text-slate-400">
-          <MapPin size={14} className="text-emerald-400" />
-          {IDENTITY.location}
-          <span className="text-slate-600" aria-hidden>•</span>
-          Mobilité Limousin
-          <span className="text-slate-600" aria-hidden>•</span>
-          Télétravail bienvenu
-        </p>
-      </Reveal>
-    </div>
-  </section>
+      <div className="flex flex-col justify-center space-y-space-sm md:w-1/2">
+        <DirectChannel
+          href={`mailto:${IDENTITY.email}`}
+          icon={Mail}
+          label="Email universitaire"
+          value={IDENTITY.email}
+        />
+        <DirectChannel href={PHONE_HREF} icon={Phone} label="Téléphone" value={IDENTITY.phone} />
+
+        <div className="grid grid-cols-1 gap-space-sm pt-space-xs min-[400px]:grid-cols-2">
+          <Profile
+            href={IDENTITY.linkedin}
+            icon={Linkedin}
+            label="LinkedIn"
+            value={`/${IDENTITY.linkedinHandle}`}
+          />
+          <Profile href={IDENTITY.github} icon={Github} label="GitHub" value={IDENTITY.githubHandle} />
+        </div>
+      </div>
+    </Card>
+  </Reveal>
 );

@@ -1,41 +1,69 @@
-import { Server, Database, Monitor, Container, Workflow } from 'lucide-react';
-import type { SkillGroup } from '../types';
+import { Container, Database, Monitor, SquareTerminal } from 'lucide-react';
+import type { Practice, SkillGroup } from '../types';
 
 export const skillGroups: SkillGroup[] = [
   {
-    title: 'Langages & Frameworks',
-    icon: Server,
-    tag: 'CORE',
-    accent: 'emerald',
-    techs: ['Java 21', 'Python', 'Spring Boot 3.3', 'Spring Security', 'JPA / Hibernate', 'API RESTful', 'PHP'],
+    title: 'Back-end & Runtimes',
+    icon: SquareTerminal,
+    skills: [
+      { name: 'Java 21', note: 'LTS' },
+      { name: 'Spring Boot 3.3', note: 'REST / Security' },
+      { name: 'JPA / Hibernate', note: 'ORM / Mappings' },
+      { name: 'Python', note: 'Scripts & automatisation' },
+      { name: 'PHP', note: 'Web' },
+    ],
   },
   {
-    title: 'Bases de données',
+    title: 'Données & Persistance',
     icon: Database,
-    tag: 'DATA LAYER',
-    accent: 'cyan',
-    techs: ['PostgreSQL 15', 'MySQL', 'SQL avancé', 'Flyway', 'Modélisation relationnelle'],
+    skills: [
+      { name: 'PostgreSQL 15', note: 'SGBD principal' },
+      { name: 'MySQL', note: 'Migration en entreprise' },
+      { name: 'Flyway', note: 'Versionnage du schéma' },
+      { name: 'Modélisation relationnelle', note: 'UML / MCD' },
+      { name: 'SQL avancé', note: 'Jointures & index' },
+    ],
   },
   {
-    title: 'Front-end & UI',
-    icon: Monitor,
-    tag: 'INTERFACE',
-    accent: 'violet',
-    techs: ['Vue.js 3', 'JavaScript ES6+', 'HTML5 / CSS3', 'React (notions)', 'Tailwind CSS'],
-  },
-  {
-    title: 'DevOps, Systèmes & Outillage',
+    title: 'Infrastructure & DevOps',
     icon: Container,
-    tag: 'INFRA',
-    accent: 'amber',
-    wide: true,
-    techs: ['Docker', 'Docker Compose', 'Linux Debian', 'Nginx', 'Git / GitHub', 'IntelliJ IDEA', 'VS Code', 'Wireshark'],
+    skills: [
+      { name: 'Docker & Compose', note: 'Conteneurisation' },
+      { name: 'Linux Debian', note: 'Administration' },
+      { name: 'Nginx', note: 'Reverse proxy' },
+      { name: 'Git & GitHub', note: 'Workflow' },
+      { name: 'Kathará & Wireshark', note: 'Réseau' },
+    ],
   },
   {
-    title: 'Méthodes & Conception',
-    icon: Workflow,
-    tag: 'PROCESS',
-    accent: 'emerald',
-    techs: ['UML', 'POO', 'Méthodes Agiles (Scrum)', 'Architecture en couches', 'Sécurité JWT', 'Tests & revue de code'],
+    title: 'Front-end & Rendu',
+    icon: Monitor,
+    skills: [
+      { name: 'Vue.js 3', note: 'SPA' },
+      { name: 'JavaScript (ES6+)', note: 'Async / Fetch' },
+      { name: 'HTML5 / CSS3', note: 'Flexbox / Grid' },
+      { name: 'JavaFX', note: 'UI desktop' },
+      { name: 'React & Tailwind', note: 'Notions' },
+    ],
+  },
+];
+
+/** Méthodes & principes — carte large de la section Compétences. */
+export const practices: Practice[] = [
+  {
+    title: 'Conception orientée objet',
+    description: 'Modélisation UML, découplage des responsabilités, modularité et réutilisabilité.',
+  },
+  {
+    title: 'Architecture RESTful & sécurité',
+    description: 'Architecture en couches, endpoints normalisés, authentification JWT sans état.',
+  },
+  {
+    title: 'Méthodes agiles (Scrum)',
+    description: 'Sprints itératifs et points réguliers avec le commanditaire du projet.',
+  },
+  {
+    title: 'Tests & revue de code',
+    description: 'Tests des cas limites, relecture croisée en équipe et validation avant livraison.',
   },
 ];

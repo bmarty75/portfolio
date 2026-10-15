@@ -1,76 +1,64 @@
-import { Terminal, Network } from 'lucide-react';
-import type { Project } from '../types';
+import { ChartLine, ClipboardList, FileText, MessageSquare, Network, ShieldCheck } from 'lucide-react';
+import type { FeaturedProject, Project } from '../types';
 
 /** Projet phare — carte pleine largeur de la section Projets. */
-export const featuredProject: Project = {
-  id: 1,
-  title: 'ERP Universitaire — IUT du Limousin',
-  category: 'Architecture Full-Stack & API REST',
-  role: 'Développeur',
+export const featuredProject: FeaturedProject = {
+  title: 'ERP Universitaire — Système de Gestion Pédagogique',
+  badge: 'Projet phare · SAÉ universitaire',
+  period: '2025–2026',
+  context:
+    'Commanditaire réel : Mme Sarlot · IUT du Limousin · Projet de 2e année mené en équipe de 5 développeurs.',
   description:
-    "Application d'entreprise commandée par un client réel et déployée en production sur le serveur Linux de l'université.",
-  fullDescription: '',
-  deliverables: [
-    "Déploiement en production sur serveur dédié Debian Linux de l'université",
-    'API REST Spring Boot 3.3 orchestrant 6 modules sans couplage fort',
-    "Sécurité JWT stateless avec matrice d'autorisations rôles/utilisateurs",
+    "Conception et déploiement en conditions réelles d'une application d'entreprise pour l'administration du département Informatique. L'architecture sépare strictement la logique métier, exposée par une API REST sécurisée, d'un front-end Vue.js, le tout conteneurisé sur le serveur Linux de l'université.",
+  modules: [
+    { icon: ShieldCheck, label: 'Authentification stateless JWT & gestion des habilitations' },
+    { icon: Network, label: 'Maquette pédagogique (UE, compétences, SAÉ, coefficients)' },
+    { icon: FileText, label: 'Fiches ressources universitaires' },
+    { icon: ChartLine, label: 'Module TAC' },
+    { icon: ClipboardList, label: "Suivi des heures d'enseignement" },
+    { icon: MessageSquare, label: 'Collecte des feedbacks' },
   ],
-  techs: [],
-  icon: Terminal,
-  date: '2025 — 2026',
-  kind: 'project',
-  status: 'PROJET PHARE • PRODUCTION',
-  meta: [
-    'Rôle : Développeur',
-    'Projet de 2ème année de BUT',
-    'Équipe de 5 développeurs',
+  specs: [
+    { key: 'Backend', value: 'Spring Boot 3.3 (Java 21)' },
+    { key: 'Persistance', value: 'PostgreSQL 15 + Flyway' },
+    { key: 'Sécurité', value: 'Spring Security + JWT' },
+    { key: 'Frontend', value: 'Vue.js 3 (SPA)' },
+    { key: 'Déploiement', value: 'Docker Compose & Nginx' },
   ],
+  specsNote: 'Documentation API : Swagger / OpenAPI 3',
+  platform: 'Debian Linux',
+  techs: ['Java 21', 'Spring Boot 3.3', 'PostgreSQL', 'Flyway', 'Docker', 'Vue.js'],
+  status: 'Déployé en production',
   githubUrl: 'https://github.com/AbdelmalikMoussaoui/SAE_ERP',
 };
 
-/** Stack du projet phare, avec teinte par technologie. */
-export const featuredStack = [
-  { label: 'Java 21', tone: 'bg-cyan-950/60 text-cyan-300 border-cyan-800' },
-  { label: 'Spring Boot 3.3', tone: 'bg-emerald-950/60 text-emerald-300 border-emerald-800' },
-  { label: 'Spring Security (JWT)', tone: 'bg-slate-800 text-slate-200 border-slate-700' },
-  { label: 'PostgreSQL 15', tone: 'bg-blue-950/60 text-blue-300 border-blue-800' },
-  { label: 'Vue.js', tone: 'bg-slate-800 text-slate-200 border-slate-700' },
-  { label: 'Docker', tone: 'bg-slate-800 text-slate-200 border-slate-700' },
-  { label: 'Nginx', tone: 'bg-slate-800 text-slate-200 border-slate-700' },
-  { label: 'Flyway', tone: 'bg-slate-800 text-slate-200 border-slate-700' },
-];
-
-/** Projets secondaires — grille deux colonnes. */
+/** Projets complémentaires — grille deux colonnes. */
 export const projects: Project[] = [
   {
-    id: 4,
     title: 'Jeu Latice — Numérisation & Architecture POO',
-    category: 'Application Desktop JavaFX',
-    role: 'Développeur Java • Modélisation Objet',
-    description: '',
-    fullDescription:
-      "Numérisation complète du jeu de plateau hawaïen Latice, depuis le moteur de règles console jusqu'à l'interface graphique JavaFX interactive. Modélisation préalable stricte via diagrammes de classes UML pour garantir un découplage sans concession entre logique de jeu, contrôleurs et rendu graphique.",
-    deliverables: [],
-    techs: ['Java', 'JavaFX', 'POO Strict', 'Modélisation UML'],
-    icon: Terminal,
+    category: 'Conception objet & algorithmique',
     date: '2025',
-    kind: 'project',
-    footerNote: 'IUT Limousin',
+    description:
+      "Numérisation complète du jeu de plateau hawaïen Latice, du moteur de règles en console jusqu'à l'interface graphique JavaFX interactive, avec un découplage strict entre logique de jeu, contrôleurs et rendu.",
+    points: [
+      'Modélisation préalable par diagrammes de classes UML',
+      'Moteur de règles indépendant, validé en console',
+      'Séparation logique de jeu / contrôleurs / rendu (MVC)',
+    ],
+    techs: ['Java', 'JavaFX', 'POO', 'UML'],
     githubUrl: 'https://github.com/bmarty75/projet-latice',
   },
   {
-    id: 5,
-    title: 'Infrastructure Réseau Simulée',
-    category: 'Réseaux & Systèmes Linux',
-    role: 'Administrateur Réseau & Systèmes',
-    description: '',
-    fullDescription:
-      "Conception et déploiement d'une infrastructure réseau d'entreprise complète avec l'émulateur Kathará. Configuration de sous-réseaux cloisonnés, services essentiels (DHCP, DNS Bind, FTP, SSH sécurisé) et diagnostic approfondi des flux de paquets à l'aide de Wireshark.",
-    deliverables: [],
-    techs: ['Kathará', 'Linux Debian', 'DHCP / DNS', 'Wireshark'],
-    icon: Network,
+    title: "Infrastructure Réseau d'Entreprise Simulée",
+    category: 'Systèmes & réseaux',
     date: '2024',
-    kind: 'project',
-    footerNote: 'IUT Limousin',
+    description:
+      "Conception et déploiement d'une infrastructure réseau d'entreprise complète avec l'émulateur Kathará : sous-réseaux cloisonnés, services essentiels et diagnostic des flux.",
+    points: [
+      'Sous-réseaux cloisonnés et routage entre domaines',
+      'Services DHCP et DNS (Bind)',
+      'Accès FTP & SSH sécurisés, analyse des paquets sous Wireshark',
+    ],
+    techs: ['Kathará', 'Linux Debian', 'DHCP / DNS', 'Wireshark'],
   },
 ];

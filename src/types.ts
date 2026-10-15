@@ -1,52 +1,57 @@
 import type { LucideIcon } from 'lucide-react';
 
-export type ProjectKind = 'project' | 'experience';
+/** Point fort illustré par une icône (modules, livrables…). */
+export interface Highlight {
+  icon: LucideIcon;
+  label: string;
+}
 
-export type LayerAccent = 'cyan' | 'teal' | 'emerald' | 'blue';
+/** Ligne « clé : valeur » du bloc de spécifications techniques. */
+export interface SpecRow {
+  key: string;
+  value: string;
+}
+
+export interface FeaturedProject {
+  title: string;
+  badge: string;
+  period: string;
+  /** Contexte affiché sous le titre (commanditaire, équipe…). */
+  context: string;
+  description: string;
+  modules: Highlight[];
+  specs: SpecRow[];
+  /** Mention affichée en pied du bloc de spécifications. */
+  specsNote: string;
+  platform: string;
+  techs: string[];
+  status: string;
+  githubUrl?: string;
+}
 
 export interface Project {
-  id: number;
   title: string;
   category: string;
-  role: string;
-  /** Résumé court affiché sur la carte. */
-  description: string;
-  /** Texte long affiché dans la carte détaillée. */
-  fullDescription: string;
-  deliverables: string[];
-  techs: string[];
-  icon: LucideIcon;
   date: string;
-  kind: ProjectKind;
-  status?: string;
-  /** Lignes de contexte affichées sous le titre du projet phare. */
-  meta?: string[];
-  location?: string;
-  footerNote?: string;
+  description: string;
+  points: string[];
+  techs: string[];
   githubUrl?: string;
-  demoUrl?: string;
+}
+
+export interface Skill {
+  name: string;
+  /** Annotation monospace alignée à droite. */
+  note: string;
 }
 
 export interface SkillGroup {
   title: string;
   icon: LucideIcon;
-  /** Étiquette monospace affichée à droite de l'en-tête. */
-  tag: string;
-  accent: 'emerald' | 'cyan' | 'violet' | 'amber';
-  techs: string[];
-  wide?: boolean;
+  skills: Skill[];
 }
 
-export interface ArchitectureLayer {
-  layer: string;
+export interface Practice {
   title: string;
-  icon: LucideIcon;
   description: string;
-  tag: string;
-  accent: LayerAccent;
-  footerLeft: string;
-  footerRight: string;
-  footerRightTone: string;
-  highlight?: boolean;
-  badge?: string;
 }

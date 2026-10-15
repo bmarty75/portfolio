@@ -1,70 +1,54 @@
-import { Layers } from 'lucide-react';
-import { skillGroups } from '../data/skills';
-import type { SkillGroup } from '../types';
-import { Reveal, SectionHeading } from './ui';
+import { DraftingCompass } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { practices, skillGroups } from '../data/skills';
+import { Card, Reveal, SectionHeading } from './ui';
 
-const accents = {
-  emerald: { icon: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400', tag: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300' },
-  cyan: { icon: 'border-cyan-500/30 bg-cyan-500/10 text-cyan-400', tag: 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300' },
-  violet: { icon: 'border-violet-500/30 bg-violet-500/10 text-violet-400', tag: 'border-violet-500/30 bg-violet-500/10 text-violet-300' },
-  amber: { icon: 'border-amber-500/30 bg-amber-500/10 text-amber-400', tag: 'border-amber-500/30 bg-amber-500/10 text-amber-300' },
-} as const;
-
-const SkillPanel = ({ group }: { group: SkillGroup }) => {
-  const { icon: Icon } = group;
-  const a = accents[group.accent];
-
-  return (
-    <div className="flex h-full flex-col rounded-2xl border border-slate-800 bg-slate-900/80 transition-all hover:border-slate-700 hover:shadow-xl">
-      <div className="flex items-center justify-between gap-3 border-b border-slate-800 px-5 py-3.5">
-        <h3 className="flex items-center gap-2.5 font-display text-sm font-bold text-white">
-          <span className={`inline-flex h-7 w-7 items-center justify-center rounded-md border ${a.icon}`}>
-            <Icon size={14} />
-          </span>
-          {group.title}
-        </h3>
-        <span className={`shrink-0 rounded border px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider ${a.tag}`}>
-          {group.tag}
-        </span>
-      </div>
-
-      <div className="flex flex-wrap gap-1.5 p-5 font-mono text-xs">
-        {group.techs.map(tech => (
-          <span
-            key={tech}
-            className="rounded border border-slate-700 bg-slate-800 px-2 py-0.5 text-slate-300"
-          >
-            {tech}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-};
+const PanelTitle = ({ icon: Icon, children }: { icon: LucideIcon; children: ReactNode }) => (
+  <div className="flex items-center gap-space-sm text-headline-sm font-semibold text-on-surface">
+    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-container text-primary">
+      <Icon size={18} aria-hidden />
+    </span>
+    <h3>{children}</h3>
+  </div>
+);
 
 export const Skills = () => (
-  <section id="stack" className="w-full border-t border-slate-800/80 bg-slate-950/40 py-20">
-    <div className="mx-auto max-w-[1240px] px-4 sm:px-6">
-      <Reveal>
-        <SectionHeading
-          eyebrow="ARSENAL TECHNIQUE • CAPABILITIES"
-          icon={<Layers size={16} />}
-          title="Stack Technique Validée"
-          className="mb-10"
-        />
-      </Reveal>
+  <section id="competences" className="flex scroll-mt-24 flex-col gap-space-lg">
+    <Reveal>
+      <SectionHeading eyebrow="Compétences & Standards" title="Arsenal technique & Pratiques" />
+    </Reveal>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {skillGroups.map((group, i) => (
-          <Reveal
-            key={group.title}
-            delay={(i % 3) * 90}
-            className={`h-full ${group.wide ? 'lg:col-span-2' : ''}`}
-          >
-            <SkillPanel group={group} />
-          </Reveal>
-        ))}
-      </div>
+    <div className="grid grid-cols-1 gap-gutter sm:grid-cols-2 lg:grid-cols-3">
+      {skillGroups.map((group, i) => (
+        <Reveal key={group.title} delay={(i % 3) * 120} className="h-full">
+          <Card className="h-full space-y-space-md p-space-lg">
+            <PanelTitle icon={group.icon}>{group.title}</PanelTitle>
+            <dl className="space-y-space-xs">
+              {group.skills.map(skill => (
+                <div key={skill.name} className="flex items-baseline justify-between gap-space-md py-1">
+                  <dt className="text-body-md font-medium text-on-surface">{skill.name}</dt>
+                  <dd className="text-right font-mono text-code-sm text-outline">{skill.note}</dd>
+                </div>
+              ))}
+            </dl>
+          </Card>
+        </Reveal>
+      ))}
+
+      <Reveal delay={120} className="h-full sm:col-span-2 lg:col-span-2">
+        <Card className="h-full space-y-space-md p-space-lg">
+          <PanelTitle icon={DraftingCompass}>Méthodologies &amp; Principes d&apos;ingénierie</PanelTitle>
+          <dl className="grid grid-cols-1 gap-space-md sm:grid-cols-2">
+            {practices.map(practice => (
+              <div key={practice.title} className="space-y-1">
+                <dt className="text-body-md font-medium text-on-surface">{practice.title}</dt>
+                <dd className="text-body-sm text-on-surface-variant">{practice.description}</dd>
+              </div>
+            ))}
+          </dl>
+        </Card>
+      </Reveal>
     </div>
   </section>
 );

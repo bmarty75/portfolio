@@ -9,75 +9,57 @@
     padding: 0;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-slate-100 font-sans antialiased;
+    @apply bg-surface font-sans text-body-md text-on-surface antialiased;
     overscroll-behavior: none;
   }
 
   ::selection {
-    @apply bg-primary text-slate-950;
-  }
-}
-
-@layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
+    @apply bg-primary-container text-on-primary-container;
   }
 
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-primary;
   }
 }
 
 /* ── Barre de défilement ──────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #07090e; }
-::-webkit-scrollbar-thumb { background: #1f293d; border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
-
-/* ── Flux de données animé traversant le schéma d'architecture ────────── */
-@keyframes dataPulse {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
-}
-
-.data-stream {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(56, 189, 248, 0.7),
-    rgba(78, 222, 163, 0.8),
-    transparent
-  );
-  animation: dataPulse 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0d0e13; }
+::-webkit-scrollbar-thumb { background: #292a2f; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #424754; }
 
 /* ── Révélation au scroll ─────────────────────────────────────────────── */
+/* Les cartes montent, se redressent et se nettoient en entrant dans l'écran. */
 .reveal {
   opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(40px) scale(0.97);
+  filter: blur(6px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .reveal.active {
   opacity: 1;
   transform: none;
+  filter: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .reveal {
     opacity: 1;
     transform: none;
+    filter: none;
     transition: none;
-  }
-
-  .data-stream {
-    animation: none;
-    opacity: 0.35;
   }
 
   *,

@@ -1,96 +1,52 @@
-import { Github, Linkedin, Mail, Phone } from 'lucide-react';
-import { IDENTITY, ALTERNANCE, NAV_LINKS } from '../lib/constants';
+import { Github, Linkedin, Mail, MapPin } from 'lucide-react';
+import { EXTERNAL, IDENTITY } from '../lib/constants';
 
-const directLinks = [
-  { value: IDENTITY.githubHandle, href: IDENTITY.github, icon: Github, external: true },
-  { value: IDENTITY.linkedinHandle, href: IDENTITY.linkedin, icon: Linkedin, external: true },
-  { value: IDENTITY.email, href: `mailto:${IDENTITY.email}`, icon: Mail, external: false },
-  { value: IDENTITY.phone, href: `tel:${IDENTITY.phone.replace(/\s/g, '')}`, icon: Phone, external: false },
+const links = [
+  { label: 'GitHub', href: IDENTITY.github, icon: Github, external: true },
+  { label: 'LinkedIn', href: IDENTITY.linkedin, icon: Linkedin, external: true },
+  { label: IDENTITY.email, href: `mailto:${IDENTITY.email}`, icon: Mail, external: false },
 ];
 
 export const Footer = () => (
-  <footer className="w-full border-t border-slate-800/80 bg-slate-950/60">
-    <div className="mx-auto max-w-[1240px] px-4 py-14 sm:px-6">
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1.2fr)]">
-        {/* Identité */}
-        <div>
-          <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-tr from-slate-950 via-slate-900 to-slate-800 ring-1 ring-cyan-500/30">
-              <span className="bg-gradient-to-br from-white via-cyan-200 to-emerald-300 bg-clip-text font-display text-sm font-extrabold text-transparent">
-                BM
-              </span>
-            </div>
-            <span className="font-display text-base font-bold text-white">
+  <footer className="w-full bg-surface-container-lowest">
+    <div className="mx-auto max-w-page px-margin-mobile py-space-2xl md:px-margin">
+      <div className="flex flex-col justify-between gap-space-lg md:flex-row md:items-center">
+        <div className="space-y-space-xs">
+          <div className="flex flex-wrap items-center gap-x-space-sm gap-y-1">
+            <span className="text-headline-sm font-semibold tracking-tight text-on-surface">
               {IDENTITY.firstName} {IDENTITY.lastName}
             </span>
-            <span className="rounded border border-slate-700 bg-slate-800 px-1.5 py-0.5 font-mono text-[10px] text-cyan-300">
+            <span className="font-mono text-label-caps uppercase tracking-wider text-outline">
               {IDENTITY.shortRole}
             </span>
           </div>
-
-          <p className="max-w-sm font-sans text-sm leading-relaxed text-slate-400">
-            Ingénierie logicielle orientée architecture distribuée et services conteneurisés.
-            Java, Python, Spring Boot, PostgreSQL et déploiement Linux.
-          </p>
-
-          <p className="mt-5 flex items-center gap-2 font-mono text-xs text-emerald-400">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" aria-hidden />
-            En alternance chez {ALTERNANCE.company} — {ALTERNANCE.period}
-          </p>
+          <div className="flex items-center gap-space-xs text-body-sm text-on-surface-variant">
+            <MapPin size={16} className="text-outline" aria-hidden />
+            <span>Limoges, France</span>
+          </div>
         </div>
 
-        {/* Navigation */}
-        <nav>
-          <h2 className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-            Architecture &amp; Sections
-          </h2>
-          <ul className="space-y-2.5">
-            {NAV_LINKS.map(link => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="font-mono text-xs text-slate-400 transition-colors hover:text-cyan-400"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        {/* Contact */}
-        <div>
-          <h2 className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-            Contact Direct
-          </h2>
-          <ul className="space-y-2.5">
-            {directLinks.map(link => {
-              const { icon: Icon } = link;
-              return (
-                <li key={link.value}>
-                  <a
-                    href={link.href}
-                    {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                    className="flex items-center gap-2 font-mono text-xs text-slate-400 transition-colors hover:text-emerald-400"
-                  >
-                    <Icon size={13} className="shrink-0" />
-                    <span className="break-all">{link.value}</span>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <ul className="flex flex-wrap items-center gap-x-space-lg gap-y-space-sm text-body-sm text-on-surface-variant">
+          {links.map(({ label, href, icon: Icon, external }) => (
+            <li key={label}>
+              <a
+                href={href}
+                {...(external ? EXTERNAL : {})}
+                className="flex items-center gap-space-xs transition-colors hover:text-primary"
+              >
+                <Icon size={16} aria-hidden />
+                <span className="break-all">{label}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
-    </div>
 
-    <div className="border-t border-slate-800/80">
-      <div className="mx-auto flex max-w-[1240px] flex-col items-center justify-between gap-2 px-4 py-5 font-mono text-[11px] text-slate-500 sm:flex-row sm:px-6">
-        <p>
-          © {new Date().getFullYear()} {IDENTITY.firstName} {IDENTITY.lastName} — Tous droits
-          réservés
-        </p>
-        <p>React · TypeScript · Tailwind CSS · Vite</p>
+      <div className="mt-space-xl flex flex-col items-center justify-between gap-space-sm pt-space-md text-center font-mono text-label-caps text-outline sm:flex-row sm:text-left">
+        <span>
+          © {new Date().getFullYear()} {IDENTITY.firstName} {IDENTITY.lastName}. Tous droits réservés.
+        </span>
+        <span>Architecture logicielle &amp; Systèmes distribués</span>
       </div>
     </div>
   </footer>
