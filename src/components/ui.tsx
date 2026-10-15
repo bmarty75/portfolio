@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { techLogos } from '../data/techLogos';
 import { useReveal } from '../hooks/useReveal';
 
 /** Révèle son contenu la première fois qu'il entre dans le viewport. */
@@ -66,7 +67,43 @@ export const Card = ({
   </Tag>
 );
 
-/** Étiquette technique monospace. */
+/** Luminance relative WCAG d'une couleur hexadécimale (« RRGGBB »). */
+const luminance = (hex: string) => {
+  const [r, g, b] = [0, 2, 4].map(i => {
+    const c = parseInt(hex.slice(i, i + 2), 16) / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+
+/** Les marques trop sombres pour le fond (#1a1b21) prennent la couleur du texte. */
+const SURFACE_LUMINANCE = luminance('1a1b21');
+const readableBrandColor = (hex: string) =>
+  (luminance(hex) + 0.05) / (SURFACE_LUMINANCE + 0.05) >= 3 ? `#${hex}` : 'currentColor';
+
+/** Logo d'une technologie : couleur de marque si lisible, icône Lucide sinon. */
+export const TechIcon = ({ name, size = 16 }: { name: string; size?: number }) => {
+  const logo = techLogos[name];
+  if (!logo) return null;
+  if (!('path' in logo)) {
+    const Icon = logo;
+    return <Icon size={size} className="shrink-0 text-on-surface-variant" aria-hidden />;
+  }
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill={readableBrandColor(logo.hex)}
+      className="shrink-0"
+      aria-hidden
+    >
+      <path d={logo.path} />
+    </svg>
+  );
+};
+
+/** Étiquette technique monospace, précédée du logo de la technologie s'il existe. */
 export const Chip = ({
   label,
   className = 'bg-surface-container text-on-surface',
@@ -74,7 +111,12 @@ export const Chip = ({
   label: string;
   className?: string;
 }) => (
-  <span className={`rounded px-2 py-1 font-mono text-code-sm ${className}`}>{label}</span>
+  <span
+    className={`inline-flex items-center gap-1.5 rounded px-2 py-1 font-mono text-code-sm ${className}`}
+  >
+    <TechIcon name={label} size={13} />
+    {label}
+  </span>
 );
 
 /** Monogramme affiché dans l'en-tête et le pied de page. */

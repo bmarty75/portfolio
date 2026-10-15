@@ -1,4 +1,8 @@
 import type { LucideIcon } from 'lucide-react';
+import type { SimpleIcon } from 'simple-icons';
+
+/** Logo d'une technologie : marque (Simple Icons) ou icône générique Lucide. */
+export type TechLogo = SimpleIcon | LucideIcon;
 
 /** Point fort illustré par une icône (modules, livrables…). */
 export interface Highlight {

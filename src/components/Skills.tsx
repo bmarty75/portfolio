@@ -2,7 +2,7 @@ import { DraftingCompass } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { practices, skillGroups } from '../data/skills';
-import { Card, Reveal, SectionHeading } from './ui';
+import { Card, Reveal, SectionHeading, TechIcon } from './ui';
 
 const PanelTitle = ({ icon: Icon, children }: { icon: LucideIcon; children: ReactNode }) => (
   <div className="flex items-center gap-space-sm text-headline-sm font-semibold text-on-surface">
@@ -26,8 +26,13 @@ export const Skills = () => (
             <PanelTitle icon={group.icon}>{group.title}</PanelTitle>
             <dl className="space-y-space-xs">
               {group.skills.map(skill => (
-                <div key={skill.name} className="flex items-baseline justify-between gap-space-md py-1">
-                  <dt className="text-body-md font-medium text-on-surface">{skill.name}</dt>
+                <div key={skill.name} className="flex items-center justify-between gap-space-md py-1">
+                  <dt className="flex items-center gap-space-sm text-body-md font-medium text-on-surface">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded bg-surface-container">
+                      <TechIcon name={skill.name} />
+                    </span>
+                    {skill.name}
+                  </dt>
                   <dd className="text-right font-mono text-code-sm text-outline">{skill.note}</dd>
                 </div>
               ))}
