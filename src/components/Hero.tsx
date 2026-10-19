@@ -1,5 +1,6 @@
 import { ArrowDown, FileText, Github, Linkedin } from 'lucide-react';
 import { ALTERNANCE, EXTERNAL, IDENTITY } from '../lib/constants';
+import { DecodeText } from './DecodeText';
 
 export const Hero = () => (
   <section id="about" className="flex scroll-mt-24 flex-col items-start gap-space-lg pt-space-md">
@@ -30,7 +31,7 @@ export const Hero = () => (
             <span className="font-mono text-code-sm text-outline">/ BUT Informatique 3e année</span>
           </div>
           <h1 className="text-display-hero-mobile font-semibold tracking-tight text-on-surface md:text-display-hero">
-            {IDENTITY.firstName} {IDENTITY.lastName}
+            <DecodeText text={`${IDENTITY.firstName} ${IDENTITY.lastName}`} />
           </h1>
           <p className="text-headline-md font-medium tracking-tight text-primary">{IDENTITY.role}</p>
         </div>
