@@ -24,7 +24,7 @@ export default function App() {
             aria-hidden
           />
 
-          <div className="relative mx-auto flex max-w-page flex-col gap-space-3xl px-margin-mobile pb-space-3xl pt-space-xl md:px-margin">
+          <div className="dim-group relative mx-auto flex max-w-page flex-col gap-space-3xl px-margin-mobile pb-space-3xl pt-space-xl md:px-margin">
             <Hero />
             <KeyFacts />
             <Experience />

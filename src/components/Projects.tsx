@@ -11,7 +11,7 @@ const FeaturedProject = () => {
   const p = featuredProject;
 
   return (
-    <Card as="article" className="flex flex-col gap-space-lg p-space-lg md:p-space-xl">
+    <Card as="article" className="dim-item flex flex-col gap-space-lg p-space-lg md:p-space-xl">
       {/* En-tête */}
       <div className="flex flex-col justify-between gap-space-sm md:flex-row md:items-center">
         <div className="space-y-1">
@@ -106,7 +106,10 @@ const FeaturedProject = () => {
 /* ── Projet complémentaire ────────────────────────────────────────────── */
 
 const ProjectCard = ({ project }: { project: Project }) => (
-  <Card as="article" className="flex h-full flex-col justify-between gap-space-md p-space-lg">
+  <Card
+    as="article"
+    className="dim-item flex h-full flex-col justify-between gap-space-md p-space-lg"
+  >
     <div className="space-y-space-sm">
       <div className="flex items-center justify-between gap-space-sm">
         <Eyebrow className="text-primary">{project.category}</Eyebrow>
