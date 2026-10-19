@@ -1,4 +1,4 @@
-import { ChartLine, ClipboardList, FileText, MessageSquare, Network, ShieldCheck } from 'lucide-react';
+import { ChartLine, ClipboardList, FileText, MessageSquare, Network } from 'lucide-react';
 import type { FeaturedProject, Project } from '../types';
 
 /** Projet phare — carte pleine largeur de la section Projets. */
@@ -11,7 +11,6 @@ export const featuredProject: FeaturedProject = {
   description:
     "Conception et déploiement d'une application d'entreprise pour l'administration du département Informatique. L'architecture sépare strictement la logique métier, exposée par une API REST sécurisée, d'un front-end Vue.js, le tout conteneurisé sur le serveur Linux de l'université.",
   modules: [
-    { icon: ShieldCheck, label: 'Authentification stateless JWT & gestion des habilitations' },
     { icon: Network, label: 'Maquette pédagogique (UE, compétences, SAÉ, coefficients)' },
     { icon: FileText, label: 'Fiches ressources universitaires' },
     { icon: ChartLine, label: 'Module TAC' },
@@ -21,7 +20,6 @@ export const featuredProject: FeaturedProject = {
   specs: [
     { key: 'Backend', value: 'Spring Boot 3.3 (Java 21)' },
     { key: 'Persistance', value: 'PostgreSQL 15 + Flyway' },
-    { key: 'Sécurité', value: 'Spring Security + JWT' },
     { key: 'Frontend', value: 'Vue.js 3 (SPA)' },
     { key: 'Déploiement', value: 'Docker Compose & Nginx' },
   ],

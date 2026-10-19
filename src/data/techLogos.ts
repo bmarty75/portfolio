@@ -68,6 +68,6 @@ export const techLogos: Record<string, TechLogo> = {
   // Expérience professionnelle
   'FoxPro Legacy': Database,
   'Modélisation MCD / MLD': Workflow,
-  'Scripts de migration SQL': FileCode,
+  'Comparaison FoxPro / MySQL': FileCode,
   "Audit d'intégrité": ShieldCheck,
 };

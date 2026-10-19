@@ -10,8 +10,8 @@ const highlights = [
   },
   {
     icon: DatabaseZap,
-    title: 'Pipeline ETL & intégrité',
-    text: "Scripts automatisés d'extraction, de transformation et de contrôle d'intégrité des données migrées.",
+    title: 'Contrôle automatisé des rapports',
+    text: 'Script qui compare automatiquement le rapport généré sous FoxPro et celui produit sous MySQL, et fait ressortir les différences.',
   },
 ];
 
@@ -19,7 +19,7 @@ const techTags = [
   'FoxPro Legacy',
   'MySQL',
   'Modélisation MCD / MLD',
-  'Scripts de migration SQL',
+  'Comparaison FoxPro / MySQL',
   "Audit d'intégrité",
 ];
 

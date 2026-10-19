@@ -1,7 +1,7 @@
 export const IDENTITY = {
   firstName: 'Benjamin',
   lastName: 'Marty',
-  role: 'Développeur Back-end & Architecte Logiciel',
+  role: 'Développeur Full-stack & Architecte Logiciel',
   shortRole: 'Développeur logiciel',
   location: 'Limoges (87)',
   email: 'benjamin.marty1@etu.unilim.fr',

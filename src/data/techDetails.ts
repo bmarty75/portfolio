@@ -15,9 +15,8 @@ const springBoot: TechInfo = {
   name: 'Spring Boot',
   category: 'Framework back-end',
   summary:
-    "Framework Java qui simplifie la création d'applications Spring prêtes pour la production : configuration automatique, serveur web embarqué et écosystème complet (Spring Web, Spring Data, Spring Security).",
-  usage:
-    "API REST de l'ERP universitaire, sécurisée par Spring Security et une authentification JWT sans état.",
+    "Framework Java qui simplifie la création d'applications Spring prêtes pour la production : configuration automatique, serveur web embarqué et écosystème complet (Spring Web, Spring Data).",
+  usage: "API REST de l'ERP universitaire, documentée avec Swagger / OpenAPI.",
 };
 
 const postgresql: TechInfo = {
@@ -231,18 +230,18 @@ export const techDetails: Record<string, TechInfo> = {
     usage: "Base d'origine de l'ERP de l'entreprise, analysée puis migrée vers MySQL.",
   },
   'Modélisation MCD / MLD': modelisation,
-  'Scripts de migration SQL': {
-    name: 'Scripts de migration SQL',
-    category: 'Migration de données',
+  'Comparaison FoxPro / MySQL': {
+    name: 'Comparaison FoxPro / MySQL',
+    category: 'Validation de migration',
     summary:
-      "Scripts qui extraient les données de l'ancien système, les transforment au format du nouveau schéma puis les chargent (démarche ETL), de façon rejouable.",
-    usage: 'Transfert des données de FoxPro vers le nouveau schéma MySQL en alternance.',
+      "Script qui compare automatiquement le rapport produit par l'ancienne base FoxPro et celui produit par la nouvelle base MySQL, pour repérer les différences sans vérification manuelle.",
+    usage: 'Validation de la migration en alternance : chaque écart entre les deux rapports est signalé.',
   },
   "Audit d'intégrité": {
     name: "Audit d'intégrité",
     category: 'Qualité des données',
     summary:
-      "Contrôles qui vérifient que les données migrées sont complètes et cohérentes : nombre d'enregistrements, clés étrangères valides, doublons, valeurs hors format.",
-    usage: 'Validation des données migrées avant la mise en service de la base MySQL.',
+      "Vérification automatique que la nouvelle base produit les mêmes résultats que l'ancienne, en comparant leurs sorties et en signalant chaque écart.",
+    usage: 'Script de comparaison entre le rapport FoxPro et le rapport MySQL pour valider la migration.',
   },
 };

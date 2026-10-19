@@ -55,8 +55,8 @@ export const practices: Practice[] = [
     description: 'Modélisation UML, découplage des responsabilités, modularité et réutilisabilité.',
   },
   {
-    title: 'Architecture RESTful & sécurité',
-    description: 'Architecture en couches, endpoints normalisés, authentification JWT sans état.',
+    title: 'Architecture RESTful',
+    description: 'Architecture en couches, endpoints normalisés, documentation Swagger / OpenAPI.',
   },
   {
     title: 'Méthodes agiles (Scrum)',

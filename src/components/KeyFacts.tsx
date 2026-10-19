@@ -36,11 +36,11 @@ const facts: Fact[] = [
     meta: ALTERNANCE.period,
   },
   {
-    label: 'Spécialisation',
+    label: 'Profil',
     icon: Cpu,
-    value: 'Back-end',
-    detail: 'Java 21 · Spring Boot 3',
-    meta: 'Persistance PostgreSQL & JPA',
+    value: 'Full-stack',
+    detail: 'Java · Python · Vue.js',
+    meta: "Du modèle de données à l'interface",
   },
   {
     label: 'Engagement',
