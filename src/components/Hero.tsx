@@ -46,7 +46,7 @@ export const Hero = () => (
 
       <a
         href={IDENTITY.cv}
-        download
+        download="CV_Marty_Benjamin.pdf"
         className="inline-flex items-center justify-center rounded bg-surface-container px-space-md py-2.5 text-body-sm text-on-surface shadow-sm transition-colors hover:bg-surface-container-high"
       >
         <FileText size={16} className="mr-1.5 text-primary" />
