@@ -177,3 +177,53 @@ html:has(dialog[open]) {
   height: 24px;
   background-color: rgb(212 243 107 / 0.2);
 }
+
+/* ── Cartes « spotlight » ─────────────────────────────────────────────── */
+/* Au survol, une lueur suit la souris dans la carte (::before) et allume la
+   bordure sous le pointeur (::after, anneau de 1px découpé par masque).
+   La position vient de --spot-x / --spot-y, mises à jour par Card. */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+
+.spotlight::before,
+.spotlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.spotlight::before {
+  background: radial-gradient(
+    420px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgb(212 243 107 / 0.07),
+    transparent 60%
+  );
+}
+
+.spotlight::after {
+  z-index: 1;
+  padding: 1px;
+  background: radial-gradient(
+    260px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgb(212 243 107 / 0.7),
+    rgb(212 243 107 / 0.15) 45%,
+    transparent 70%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+@media (hover: hover) {
+  .spotlight:hover::before,
+  .spotlight:hover::after {
+    opacity: 1;
+  }
+}

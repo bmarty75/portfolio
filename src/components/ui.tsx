@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { PointerEvent, ReactNode } from 'react';
 import { techDetails } from '../data/techDetails';
 import { techLogos } from '../data/techLogos';
 import { useReveal } from '../hooks/useReveal';
@@ -52,7 +52,19 @@ export const SectionHeading = ({ eyebrow, title }: { eyebrow: string; title: Rea
   </div>
 );
 
-/** Carte de base de la maquette : surface surélevée, sans bordure. */
+/** Place la lueur « spotlight » de la carte sous le pointeur (voir .spotlight). */
+const moveSpotlight = (e: PointerEvent<HTMLElement>) => {
+  if (e.pointerType !== 'mouse') return;
+  const card = e.currentTarget;
+  const rect = card.getBoundingClientRect();
+  card.style.setProperty('--spot-x', `${e.clientX - rect.left}px`);
+  card.style.setProperty('--spot-y', `${e.clientY - rect.top}px`);
+};
+
+/**
+ * Carte de base de la maquette : surface surélevée, sans bordure.
+ * Au survol, une lueur suit la souris et allume la bordure sous le pointeur.
+ */
 export const Card = ({
   children,
   className = '',
@@ -64,7 +76,11 @@ export const Card = ({
   id?: string;
   as?: 'div' | 'article' | 'section';
 }) => (
-  <Tag id={id} className={`rounded-xl bg-surface-container-low shadow-sm ${className}`}>
+  <Tag
+    id={id}
+    onPointerMove={moveSpotlight}
+    className={`spotlight rounded-xl bg-surface-container-low shadow-sm ${className}`}
+  >
     {children}
   </Tag>
 );
