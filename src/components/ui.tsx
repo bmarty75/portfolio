@@ -78,8 +78,8 @@ const luminance = (hex: string) => {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };
 
-/** Les marques trop sombres pour le fond (#1a1b21) prennent la couleur du texte. */
-const SURFACE_LUMINANCE = luminance('1a1b21');
+/** Les marques trop sombres pour le fond (#1b1b18) prennent la couleur du texte. */
+const SURFACE_LUMINANCE = luminance('1b1b18');
 const readableBrandColor = (hex: string) =>
   (luminance(hex) + 0.05) / (SURFACE_LUMINANCE + 0.05) >= 3 ? `#${hex}` : 'currentColor';
 
