@@ -3,6 +3,10 @@ import { useEffect } from 'react';
 /** Éléments sur lesquels l'anneau s'agrandit. */
 const INTERACTIVE = 'a, button, summary, label, [role="button"], .cursor-pointer';
 
+/** Coche affichée dans l'anneau pour confirmer une action (voir flashCursorCheck). */
+const CHECK_ICON =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+
 /** Part du chemin restant parcourue par l'anneau à chaque image (inertie). */
 const RING_EASE = 0.18;
 
@@ -24,6 +28,7 @@ export const Cursor = () => {
     const ring = document.createElement('div');
     dot.className = 'cursor-dot';
     ring.className = 'cursor-ring';
+    ring.innerHTML = CHECK_ICON;
     dot.setAttribute('aria-hidden', 'true');
     ring.setAttribute('aria-hidden', 'true');
 
@@ -88,7 +93,13 @@ export const Cursor = () => {
       window.removeEventListener('pointerdown', onDown);
       window.removeEventListener('pointerup', onUp);
       root.removeEventListener('mouseleave', onLeave);
-      root.classList.remove('has-custom-cursor', 'cursor-visible', 'cursor-hover', 'cursor-press');
+      root.classList.remove(
+        'has-custom-cursor',
+        'cursor-visible',
+        'cursor-hover',
+        'cursor-press',
+        'cursor-confirm',
+      );
       dot.remove();
       ring.remove();
     };

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowRight, Check, Github, Linkedin, Mail, Phone } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { ALTERNANCE, EXTERNAL, IDENTITY, PHONE_HREF } from '../lib/constants';
+import { flashCursorCheck } from '../lib/cursor';
 import { Card, Eyebrow, Reveal, SectionHeading } from './ui';
 
 const DirectChannel = ({
@@ -27,6 +28,8 @@ const DirectChannel = ({
       () => true,
       () => false,
     );
+    // Confirmation immédiate au curseur : l'anneau devient une coche.
+    copy.then(ok => ok && flashCursorCheck());
 
     let left = false;
     const onLeave = () => {

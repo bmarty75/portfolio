@@ -1,10 +1,33 @@
 import { ChevronLeft, ChevronRight, Film, ImageOff, Play, X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import type { KeyboardEvent, PointerEvent } from 'react';
 import type { DemoMedia } from '../types';
 
 /** Distance horizontale minimale (px) pour qu'un glissement change de média. */
 const SWIPE_THRESHOLD = 50;
+
+/** Nom de View Transition partagé par la carte du projet et la galerie ouverte. */
+const MORPH = 'demo-morph';
+
+const canMorph = () =>
+  'startViewTransition' in document &&
+  !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/**
+ * Applique `update` dans une View Transition : la carte du projet grandit
+ * jusqu'à la galerie (et inversement). Sans prise en charge, mise à jour directe.
+ */
+const morph = (update: () => void) => {
+  if (!canMorph()) {
+    update();
+    return null;
+  }
+  const transition = document.startViewTransition(() => flushSync(update));
+  // Une transition interrompue (clics rapides) n'est pas une erreur.
+  transition.ready.catch(() => {});
+  return transition.finished;
+};
 
 /** Emplacement affiché tant qu'une capture ou une vidéo n'a pas été ajoutée. */
 const Placeholder = ({ media }: { media: DemoMedia }) => {
@@ -24,10 +47,12 @@ const Placeholder = ({ media }: { media: DemoMedia }) => {
 const DemoDialog = ({
   title,
   media,
+  morphing,
   onClose,
 }: {
   title: string;
   media: DemoMedia[];
+  morphing: boolean;
   onClose: () => void;
 }) => {
   const ref = useRef<HTMLDialogElement>(null);
@@ -37,7 +62,8 @@ const DemoDialog = ({
   const current = media[index];
   const multiple = media.length > 1;
 
-  useEffect(() => {
+  // Avant l'affichage : la View Transition doit capturer la galerie déjà ouverte.
+  useLayoutEffect(() => {
     ref.current?.showModal();
   }, []);
 
@@ -67,10 +93,16 @@ const DemoDialog = ({
     <dialog
       ref={ref}
       aria-labelledby="demo-dialog-title"
+      onCancel={e => {
+        // Échap : fermeture animée plutôt que la fermeture native immédiate.
+        e.preventDefault();
+        onClose();
+      }}
       onClose={onClose}
       onKeyDown={onKeyDown}
-      onClick={e => e.target === e.currentTarget && ref.current?.close()}
-      className="tech-dialog m-auto w-[calc(100%-2rem)] max-w-4xl rounded-2xl bg-surface-container-low text-on-surface shadow-2xl backdrop:bg-black/70 backdrop:backdrop-blur-sm"
+      onClick={e => e.target === e.currentTarget && onClose()}
+      style={morphing ? { viewTransitionName: MORPH } : undefined}
+      className={`${morphing ? 'demo-morph' : ''} tech-dialog m-auto w-[calc(100%-2rem)] max-w-4xl rounded-2xl bg-surface-container-low text-on-surface shadow-2xl backdrop:bg-black/70 backdrop:backdrop-blur-sm`}
     >
       <div className="space-y-space-md p-space-md md:p-space-lg">
         <div className="flex items-start justify-between gap-space-md">
@@ -84,7 +116,7 @@ const DemoDialog = ({
           </div>
           <button
             type="button"
-            onClick={() => ref.current?.close()}
+            onClick={onClose}
             aria-label="Fermer"
             className="-mr-1 -mt-1 rounded p-1 text-outline transition-colors hover:bg-surface-container hover:text-on-surface"
           >
@@ -203,23 +235,53 @@ const DemoDialog = ({
   );
 };
 
-/** Bouton « Voir la démo » qui ouvre la galerie du projet. */
+/**
+ * Bouton « Voir la démo » qui ouvre la galerie du projet. Quand le navigateur
+ * le permet, la carte qui contient le bouton se transforme en galerie.
+ */
 export const DemoButton = ({ title, media }: { title: string; media: DemoMedia[] }) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
+  const [morphing] = useState(canMorph);
   if (media.length === 0) return null;
+
+  const card = () => buttonRef.current?.closest('article') ?? null;
+
+  const show = () => {
+    const el = card();
+    if (el) el.style.viewTransitionName = MORPH;
+    morph(() => {
+      if (el) el.style.viewTransitionName = '';
+      setOpen(true);
+    });
+  };
+
+  const hide = () => {
+    const el = card();
+    const reset = () => {
+      if (el) el.style.viewTransitionName = '';
+    };
+    const done = morph(() => {
+      if (el) el.style.viewTransitionName = MORPH;
+      setOpen(false);
+    });
+    if (done) done.then(reset, reset);
+    else reset();
+  };
 
   return (
     <>
       <button
+        ref={buttonRef}
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={show}
         aria-haspopup="dialog"
         className="inline-flex shrink-0 items-center gap-1.5 rounded bg-primary/10 px-2 py-1 font-mono text-code-sm text-primary transition-colors hover:bg-primary/20"
       >
         <Play size={13} fill="currentColor" aria-hidden />
         Voir la démo
       </button>
-      {open && <DemoDialog title={title} media={media} onClose={() => setOpen(false)} />}
+      {open && <DemoDialog title={title} media={media} morphing={morphing} onClose={hide} />}
     </>
   );
 };
