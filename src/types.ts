@@ -27,6 +27,16 @@ export interface SpecRow {
   value: string;
 }
 
+/** Capture ou vidéo affichée dans la galerie de démonstration d'un projet. */
+export interface DemoMedia {
+  type: 'image' | 'video';
+  /** Chemin depuis `public/` (ex. « /projects/erp/dashboard.webp »). */
+  src: string;
+  caption: string;
+  /** Image affichée avant la lecture d'une vidéo. */
+  poster?: string;
+}
+
 export interface FeaturedProject {
   title: string;
   badge: string;
@@ -42,6 +52,7 @@ export interface FeaturedProject {
   techs: string[];
   status: string;
   githubUrl?: string;
+  demo?: DemoMedia[];
 }
 
 export interface Project {
@@ -52,6 +63,7 @@ export interface Project {
   points: string[];
   techs: string[];
   githubUrl?: string;
+  demo?: DemoMedia[];
 }
 
 export interface Skill {

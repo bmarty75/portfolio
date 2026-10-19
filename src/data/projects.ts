@@ -27,7 +27,40 @@ export const featuredProject: FeaturedProject = {
   platform: 'Debian Linux',
   techs: ['Java 21', 'Spring Boot 3.3', 'PostgreSQL', 'Flyway', 'Docker', 'Vue.js'],
   status: "Déployé sur le serveur de l'IUT",
-  githubUrl: 'https://github.com/AbdelmalikMoussaoui/SAE_ERP',
+  githubUrl: 'https://github.com/MalikMoussaoui/SAE_ERP',
+  demo: [
+    {
+      type: 'video',
+      src: '/projects/erp/demo.mp4',
+      poster: '/projects/erp/demo-poster.webp',
+      caption: "Parcours complet de l'application",
+    },
+    {
+      type: 'image',
+      src: '/projects/erp/fiches.webp',
+      caption: 'Fiches ressources et leur cycle de validation (brouillon, soumise, validée)',
+    },
+    {
+      type: 'image',
+      src: '/projects/erp/fiche.webp',
+      caption: 'Fiche ressource : identification, volume horaire et objectifs',
+    },
+    {
+      type: 'image',
+      src: '/projects/erp/mccc.webp',
+      caption: 'Modalités de contrôle des connaissances (MCCC) par UE',
+    },
+    {
+      type: 'image',
+      src: '/projects/erp/maquette.webp',
+      caption: 'Paramétrage de la formation : départements et UE',
+    },
+    {
+      type: 'image',
+      src: '/projects/erp/swagger.webp',
+      caption: "Documentation de l'API (Swagger / OpenAPI)",
+    },
+  ],
 };
 
 /** Projets complémentaires — grille deux colonnes. */
@@ -45,6 +78,21 @@ export const projects: Project[] = [
     ],
     techs: ['Java', 'JavaFX', 'POO', 'UML'],
     githubUrl: 'https://github.com/bmarty75/projet-latice',
+    demo: [
+      {
+        type: 'video',
+        src: '/projects/latice/partie.mp4',
+        poster: '/projects/latice/plateau.webp',
+        caption: 'Une partie en cours',
+      },
+      {
+        type: 'image',
+        src: '/projects/latice/plateau.webp',
+        caption: 'Plateau de jeu et main du joueur',
+      },
+      { type: 'image', src: '/projects/latice/fin-partie.webp', caption: 'Écran de fin de partie' },
+      { type: 'image', src: '/projects/latice/uml.webp', caption: 'Diagramme de classes UML' },
+    ],
   },
   {
     title: "Infrastructure Réseau d'Entreprise Simulée",

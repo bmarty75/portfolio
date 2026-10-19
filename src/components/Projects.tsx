@@ -2,6 +2,7 @@ import { ArrowUpRight, Check, CircleCheck, SquareTerminal } from 'lucide-react';
 import { featuredProject, projects } from '../data/projects';
 import type { Project } from '../types';
 import { EXTERNAL } from '../lib/constants';
+import { DemoButton } from './DemoDialog';
 import { Card, Chip, Eyebrow, Reveal, SectionHeading } from './ui';
 
 /* ── Projet phare ─────────────────────────────────────────────────────── */
@@ -26,16 +27,19 @@ const FeaturedProject = () => {
           <p className="text-body-md text-on-surface-variant">{p.context}</p>
         </div>
 
-        {p.githubUrl && (
-          <a
-            href={p.githubUrl}
-            {...EXTERNAL}
-            className="inline-flex shrink-0 items-center gap-1 self-start rounded bg-surface-container px-2 py-1 font-mono text-code-sm text-outline transition-colors hover:bg-surface-container-high hover:text-on-surface md:self-auto"
-          >
-            Code source
-            <ArrowUpRight size={14} aria-hidden />
-          </a>
-        )}
+        <div className="flex shrink-0 flex-wrap items-center gap-2 self-start md:self-auto">
+          {p.demo && <DemoButton title={p.title} media={p.demo} />}
+          {p.githubUrl && (
+            <a
+              href={p.githubUrl}
+              {...EXTERNAL}
+              className="inline-flex items-center gap-1 rounded bg-surface-container px-2 py-1 font-mono text-code-sm text-outline transition-colors hover:bg-surface-container-high hover:text-on-surface"
+            >
+              Code source
+              <ArrowUpRight size={14} aria-hidden />
+            </a>
+          )}
+        </div>
       </div>
 
       {/* Description & spécifications */}
@@ -126,16 +130,19 @@ const ProjectCard = ({ project }: { project: Project }) => (
           <Chip key={tech} label={tech} />
         ))}
       </div>
-      {project.githubUrl && (
-        <a
-          href={project.githubUrl}
-          {...EXTERNAL}
-          className="inline-flex items-center gap-1 font-mono text-code-sm text-outline transition-colors hover:text-primary"
-        >
-          GitHub
-          <ArrowUpRight size={14} aria-hidden />
-        </a>
-      )}
+      <div className="flex items-center gap-space-sm">
+        {project.demo && <DemoButton title={project.title} media={project.demo} />}
+        {project.githubUrl && (
+          <a
+            href={project.githubUrl}
+            {...EXTERNAL}
+            className="inline-flex items-center gap-1 font-mono text-code-sm text-outline transition-colors hover:text-primary"
+          >
+            GitHub
+            <ArrowUpRight size={14} aria-hidden />
+          </a>
+        )}
+      </div>
     </div>
   </Card>
 );
