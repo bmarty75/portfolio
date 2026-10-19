@@ -13,8 +13,7 @@ export default function App() {
   return (
     <TechDialogProvider>
       <Cursor />
-      {/* Pas de fond ici : celui du body laisse passer la lueur du curseur. */}
-      <div className="flex min-h-screen flex-col text-on-surface">
+      <div className="flex min-h-screen flex-col bg-surface text-on-surface">
         <Navbar />
 
         <main className="relative w-full flex-grow overflow-hidden pt-16">
