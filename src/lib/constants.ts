@@ -11,6 +11,7 @@ export const IDENTITY = {
   github: 'https://github.com/bmarty75',
   githubHandle: 'github.com/bmarty75',
   cv: '/cv.pdf',
+  photo: '/photo.webp',
 } as const;
 
 /** Alternance en cours — 3ème année de BUT. */
