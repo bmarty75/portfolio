@@ -1,4 +1,5 @@
-import { ArrowRight, Github, Linkedin, Mail, Phone } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowRight, Check, Github, Linkedin, Mail, Phone } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { ALTERNANCE, EXTERNAL, IDENTITY, PHONE_HREF } from '../lib/constants';
 import { Card, Eyebrow, Reveal, SectionHeading } from './ui';
@@ -8,32 +9,72 @@ const DirectChannel = ({
   icon: Icon,
   label,
   value,
+  copyFallback = false,
 }: {
   href: string;
   icon: LucideIcon;
   label: string;
   value: string;
-}) => (
-  <a
-    href={href}
-    className="group flex items-center justify-between gap-space-md rounded-lg bg-surface-container p-space-md transition-colors hover:bg-surface-container-high"
-  >
-    <div className="flex min-w-0 items-center gap-space-md">
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-surface-container-low text-primary transition-transform group-hover:scale-105">
-        <Icon size={20} aria-hidden />
-      </span>
-      <div className="min-w-0">
-        <Eyebrow>{label}</Eyebrow>
-        <div className="truncate text-body-md font-medium text-on-surface">{value}</div>
+  copyFallback?: boolean;
+}) => {
+  const [copied, setCopied] = useState(false);
+
+  // Si aucun client mail ne s'ouvre (la page garde le focus), on signale que l'adresse a été copiée.
+  // La copie est faite tout de suite, tant que le clic autorise encore l'accès au presse-papiers.
+  const handleClick = () => {
+    if (!copyFallback || !navigator.clipboard) return;
+    const copy = navigator.clipboard.writeText(value).then(
+      () => true,
+      () => false,
+    );
+
+    let left = false;
+    const onLeave = () => {
+      if (document.visibilityState === 'hidden' || !document.hasFocus()) left = true;
+    };
+    window.addEventListener('blur', onLeave);
+    document.addEventListener('visibilitychange', onLeave);
+
+    window.setTimeout(async () => {
+      window.removeEventListener('blur', onLeave);
+      document.removeEventListener('visibilitychange', onLeave);
+      if (!left && (await copy)) {
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 2500);
+      }
+    }, 1000);
+  };
+
+  return (
+    <a
+      href={href}
+      onClick={handleClick}
+      className="group flex items-center justify-between gap-space-md rounded-lg bg-surface-container p-space-md transition-colors hover:bg-surface-container-high"
+    >
+      <div className="flex min-w-0 items-center gap-space-md">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-surface-container-low text-primary transition-transform group-hover:scale-105">
+          <Icon size={20} aria-hidden />
+        </span>
+        <div className="min-w-0">
+          <Eyebrow>{label}</Eyebrow>
+          <div className="truncate text-body-md font-medium text-on-surface">{value}</div>
+        </div>
       </div>
-    </div>
-    <ArrowRight
-      size={20}
-      className="shrink-0 text-outline transition-colors group-hover:text-primary"
-      aria-hidden
-    />
-  </a>
-);
+      <span className="flex shrink-0 items-center gap-2" aria-live="polite">
+        {copied && <span className="font-mono text-code-sm text-primary">Adresse copiée</span>}
+        {copied ? (
+          <Check size={20} className="text-primary" aria-hidden />
+        ) : (
+          <ArrowRight
+            size={20}
+            className="text-outline transition-colors group-hover:text-primary"
+            aria-hidden
+          />
+        )}
+      </span>
+    </a>
+  );
+};
 
 const Profile = ({
   href,
@@ -86,6 +127,7 @@ export const Contact = () => (
           icon={Mail}
           label="Email universitaire"
           value={IDENTITY.email}
+          copyFallback
         />
         <DirectChannel href={PHONE_HREF} icon={Phone} label="Téléphone" value={IDENTITY.phone} />
 
