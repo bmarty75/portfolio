@@ -7,10 +7,12 @@ import { Skills } from './components/Skills';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { TechDialogProvider } from './components/TechDialog';
+import { Cursor } from './components/Cursor';
 
 export default function App() {
   return (
     <TechDialogProvider>
+      <Cursor />
       <div className="flex min-h-screen flex-col bg-surface text-on-surface">
         <Navbar />
 

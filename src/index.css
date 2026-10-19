@@ -88,3 +88,66 @@
 html:has(dialog[open]) {
   overflow: hidden;
 }
+
+/* ── Curseur personnalisé ─────────────────────────────────────────────── */
+/* Point chartreuse précis + anneau qui suit avec inertie (voir Cursor.tsx). */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 9999px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  will-change: transform;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: #d4f36b;
+  transition: opacity 0.2s ease, width 0.2s ease, height 0.2s ease;
+}
+
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid rgb(212 243 107 / 0.55);
+  transition: opacity 0.2s ease,
+              width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.3s ease,
+              border-color 0.3s ease;
+}
+
+.cursor-visible .cursor-dot,
+.cursor-visible .cursor-ring {
+  opacity: 1;
+}
+
+/* Survol d'un élément cliquable : l'anneau s'ouvre et se teinte. */
+.cursor-hover .cursor-ring {
+  width: 54px;
+  height: 54px;
+  border-color: rgb(212 243 107 / 0.9);
+  background-color: rgb(212 243 107 / 0.08);
+}
+
+.cursor-hover .cursor-dot {
+  width: 4px;
+  height: 4px;
+}
+
+/* Clic : l'anneau se resserre. */
+.cursor-press .cursor-ring {
+  width: 24px;
+  height: 24px;
+  background-color: rgb(212 243 107 / 0.2);
+}
