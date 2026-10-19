@@ -227,16 +227,3 @@ html:has(dialog[open]) {
     opacity: 1;
   }
 }
-
-/* ── Atténuation des voisins ──────────────────────────────────────────── */
-/* Survoler une carte .dim-item fait pâlir les autres cartes .dim-item du même
-   .dim-group : l'œil va à celle qu'on regarde, sans rien ajouter à l'écran. */
-.dim-item {
-  transition: opacity 0.3s ease;
-}
-
-@media (hover: hover) {
-  .dim-group:has(.dim-item:hover) .dim-item:not(:hover) {
-    opacity: 0.55;
-  }
-}

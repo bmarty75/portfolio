@@ -30,10 +30,7 @@ export const Experience = () => (
     </Reveal>
 
     <Reveal delay={80}>
-      <Card
-        as="article"
-        className="dim-item flex flex-col gap-space-xl p-space-lg md:flex-row md:p-space-xl"
-      >
+      <Card as="article" className="flex flex-col gap-space-xl p-space-lg md:flex-row md:p-space-xl">
         {/* Méta */}
         <div className="flex flex-col justify-between gap-space-lg md:w-1/3">
           <div className="space-y-space-xs">
