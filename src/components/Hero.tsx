@@ -39,8 +39,8 @@ export const Hero = () => (
       <p className="max-w-3xl text-body-lg leading-relaxed text-on-surface-variant">
         Étudiant en 3<sup>e</sup> année de BUT Informatique à l&apos;IUT du Limousin, en alternance
         chez {ALTERNANCE.company}. Je conçois des architectures applicatives fiables, modulaires et
-        maintenables, avec une affinité prononcée pour l&apos;écosystème Java, Spring Boot 3 et les
-        bases relationnelles PostgreSQL.
+        maintenables, avec une affinité prononcée pour l&apos;écosystème Java, Python et les bases de
+        données relationnelles (SQL).
       </p>
     </div>
 
