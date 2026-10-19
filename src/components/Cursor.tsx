@@ -8,7 +8,8 @@ const RING_EASE = 0.18;
 
 /**
  * Remplace le curseur système par un point chartreuse et un anneau qui le suit
- * avec un léger retard. Actif uniquement avec une souris (pointeur précis).
+ * avec un léger retard, accompagnés d'une grande lueur diffuse qui éclaire le
+ * fond de la page. Actif uniquement avec une souris (pointeur précis).
  *
  * Les éléments sont créés hors de React : ils doivent pouvoir passer dans un
  * `<dialog>` ouvert, sans quoi la couche supérieure de la modale les masquerait.
@@ -22,10 +23,13 @@ export const Cursor = () => {
 
     const dot = document.createElement('div');
     const ring = document.createElement('div');
+    const glow = document.createElement('div');
     dot.className = 'cursor-dot';
     ring.className = 'cursor-ring';
+    glow.className = 'cursor-glow';
     dot.setAttribute('aria-hidden', 'true');
     ring.setAttribute('aria-hidden', 'true');
+    glow.setAttribute('aria-hidden', 'true');
 
     const root = document.documentElement;
     root.classList.add('has-custom-cursor');
@@ -50,6 +54,7 @@ export const Cursor = () => {
       ringX += (mouseX - ringX) * ease;
       ringY += (mouseY - ringY) * ease;
       place(ring, ringX, ringY);
+      place(glow, ringX, ringY);
       // S'arrête une fois l'anneau rattrapé, jusqu'au prochain mouvement.
       frame = Math.hypot(mouseX - ringX, mouseY - ringY) > 0.1 ? requestAnimationFrame(tick) : 0;
     };
@@ -76,6 +81,8 @@ export const Cursor = () => {
     const onUp = () => root.classList.remove('cursor-press');
     const onLeave = () => root.classList.remove('cursor-visible');
 
+    // La lueur reste sous le contenu de la page, même quand une modale est ouverte.
+    document.body.prepend(glow);
     mount();
     window.addEventListener('pointermove', onMove, { passive: true });
     window.addEventListener('pointerdown', onDown);
@@ -91,6 +98,7 @@ export const Cursor = () => {
       root.classList.remove('has-custom-cursor', 'cursor-visible', 'cursor-hover', 'cursor-press');
       dot.remove();
       ring.remove();
+      glow.remove();
     };
   }, []);
 

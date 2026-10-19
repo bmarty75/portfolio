@@ -132,6 +132,32 @@ html:has(dialog[open]) {
   opacity: 1;
 }
 
+/* Lueur qui suit la souris : grand halo chartreuse très diffus, posé sous le
+   contenu (z-index négatif) pour n'éclairer que le fond de la page. */
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 1200px;
+  height: 1200px;
+  pointer-events: none;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle closest-side,
+    rgb(212 243 107 / 0.075),
+    rgb(212 243 107 / 0.03) 45%,
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  will-change: transform;
+}
+
+.cursor-visible .cursor-glow {
+  opacity: 1;
+}
+
 /* Survol d'un élément cliquable : l'anneau s'ouvre et se teinte. */
 .cursor-hover .cursor-ring {
   width: 54px;
