@@ -7,6 +7,9 @@
   body {
     margin: 0;
     padding: 0;
+    /* Garde-fou : rien ne doit faire apparaître de défilement horizontal.
+       `clip` (et non `hidden`) ne crée pas de conteneur de défilement. */
+    overflow-x: clip;
   }
 
   html {
@@ -16,6 +19,8 @@
   body {
     @apply bg-surface font-sans text-body-md text-on-surface antialiased;
     overscroll-behavior: none;
+    /* Contient aussi les éléments en position absolue dans le garde-fou ci-dessus. */
+    position: relative;
   }
 
   ::selection {
