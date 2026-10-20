@@ -26,7 +26,7 @@ export const Hero = () => (
         <div className="flex min-w-0 flex-col gap-space-xs">
           <div className="flex flex-wrap items-baseline gap-x-space-md gap-y-1">
             <span className="font-mono text-label-caps uppercase tracking-widest text-primary">
-              Ingénieur logiciel junior
+              Alternant en développement logiciel
             </span>
             <span className="font-mono text-code-sm text-outline">/ BUT Informatique 3e année</span>
           </div>
