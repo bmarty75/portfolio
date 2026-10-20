@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { KeyFacts } from './components/KeyFacts';
@@ -8,8 +9,12 @@ import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { TechDialogProvider } from './components/TechDialog';
 import { Cursor } from './components/Cursor';
+import { useSpaceScroll } from './hooks/useSpaceScroll';
 
 export default function App() {
+  const sectionsRef = useRef<HTMLDivElement>(null);
+  useSpaceScroll(sectionsRef);
+
   return (
     <TechDialogProvider>
       <Cursor />
@@ -23,7 +28,10 @@ export default function App() {
             aria-hidden
           />
 
-          <div className="relative mx-auto flex max-w-page flex-col gap-space-3xl px-margin-mobile pb-space-3xl pt-space-xl md:px-margin">
+          <div
+            ref={sectionsRef}
+            className="relative mx-auto flex max-w-page flex-col gap-space-3xl px-margin-mobile pb-space-3xl pt-space-xl md:px-margin"
+          >
             <Hero />
             <KeyFacts />
             <Experience />
