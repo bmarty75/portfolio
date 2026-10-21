@@ -1,15 +1,26 @@
-import { ArrowDown, FileText, Github, Linkedin } from 'lucide-react';
-import { ALTERNANCE, EXTERNAL, IDENTITY } from '../lib/constants';
+import { ArrowDown, FileText, Github, Linkedin, Search } from 'lucide-react';
+import { ALTERNANCE, EXTERNAL, IDENTITY, SEEKING } from '../lib/constants';
 import { DecodeText } from './DecodeText';
 
 export const Hero = () => (
   <section id="about" className="flex scroll-mt-24 flex-col items-start gap-space-lg pt-space-md">
-    {/* Statut */}
-    <div className="inline-flex items-center gap-space-sm rounded-2xl bg-surface-container-low px-space-md py-1.5 font-mono text-label-caps tracking-wider text-on-surface-variant shadow-sm">
-      <span className="inline-block h-2 w-2 shrink-0 animate-pulse rounded-full bg-primary" aria-hidden />
-      <span>
-        En alternance chez {ALTERNANCE.company} — {ALTERNANCE.period} ({ALTERNANCE.duration})
-      </span>
+    {/* Statut & recherche */}
+    <div className="flex flex-wrap items-center gap-space-sm">
+      <div className="inline-flex items-center gap-space-sm rounded-2xl bg-surface-container-low px-space-md py-1.5 font-mono text-label-caps tracking-wider text-on-surface-variant shadow-sm">
+        <span className="inline-block h-2 w-2 shrink-0 animate-pulse rounded-full bg-primary" aria-hidden />
+        <span>
+          En alternance chez {ALTERNANCE.company} — {ALTERNANCE.period} ({ALTERNANCE.duration})
+        </span>
+      </div>
+      <a
+        href="#contact"
+        className="inline-flex items-center gap-space-sm rounded-2xl px-space-md py-1.5 font-mono text-label-caps tracking-wider text-primary ring-1 ring-primary/40 transition-colors hover:bg-surface-container-low"
+      >
+        <Search size={14} className="shrink-0" aria-hidden />
+        <span>
+          Recherche : {SEEKING.goal.toLowerCase()} — {SEEKING.start.toLowerCase()}
+        </span>
+      </a>
     </div>
 
     {/* Identité */}
@@ -39,9 +50,8 @@ export const Hero = () => (
 
       <p className="max-w-3xl text-body-lg leading-relaxed text-on-surface-variant">
         Étudiant en 3<sup>e</sup> année de BUT Informatique à l&apos;IUT du Limousin, en alternance
-        chez {ALTERNANCE.company}. Je conçois des architectures applicatives fiables, modulaires et
-        maintenables, avec une affinité prononcée pour l&apos;écosystème Java, Python et les bases de
-        données relationnelles (SQL).
+        chez {ALTERNANCE.company}. Je crée des applications solides et faciles à faire évoluer,
+        surtout en Java et en Python, avec des bases de données SQL.
       </p>
     </div>
 

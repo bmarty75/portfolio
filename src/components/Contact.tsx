@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ArrowRight, Check, Github, Linkedin, Mail, Phone } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { ALTERNANCE, EXTERNAL, IDENTITY, PHONE_HREF } from '../lib/constants';
+import { ALTERNANCE, EXTERNAL, IDENTITY, PHONE_HREF, SEEKING } from '../lib/constants';
 import { flashCursorCheck } from '../lib/cursor';
 import { Card, Eyebrow, Reveal, SectionHeading } from './ui';
 
@@ -117,6 +117,11 @@ export const Contact = () => (
           <strong className="font-medium text-on-surface">{ALTERNANCE.company}</strong> jusqu&apos;en
           juillet 2027. Une question sur un projet, une architecture ou une technologie de ma stack ?
           Échangeons sur vos besoins applicatifs et la suite de mon parcours.
+        </p>
+        <p className="text-body-lg leading-relaxed text-on-surface-variant">
+          Je recherche un{' '}
+          <strong className="font-medium text-on-surface">{SEEKING.goal.toLowerCase()}</strong> à
+          partir de {SEEKING.start.toLowerCase()}.
         </p>
         <div className="flex items-center gap-2 pt-2 font-mono text-code-sm text-outline">
           <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-primary" aria-hidden />

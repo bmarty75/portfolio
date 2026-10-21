@@ -24,6 +24,12 @@ export const ALTERNANCE = {
   duration: '11 mois',
 } as const;
 
+/** Ce que je recherche après le BUT. */
+export const SEEKING = {
+  goal: 'Master en alternance',
+  start: 'Septembre 2027',
+} as const;
+
 export const NAV_LINKS = [
   { label: 'À propos', href: '#about' },
   { label: 'Parcours', href: '#parcours' },
